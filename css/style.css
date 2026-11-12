@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Kantumruy+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
+
+:root {
+  --primary: #e11d48;
+  --primary-light: #ffe4e6;
+  --primary-dark: #9f1239;
+  --primary-gradient: linear-gradient(135deg, #f43f5e 0%, #e11d48 50%, #be123c 100%);
+  --secondary: #fb7185;
+  --accent: #fda4af;
+  --bg-main: #fff5f7;
+  --card-bg: #ffffff;
+  --text-main: #1f2937;
+  --text-muted: #6b7280;
+  --border-color: #fecdd3;
+  --tg-theme-bg-color: #fff5f7;
+  --tg-theme-text-color: #1f2937;
+  --shadow-sm: 0 2px 8px rgba(225, 29, 72, 0.06);
+  --shadow-md: 0 8px 24px rgba(225, 29, 72, 0.1);
+  --shadow-lg: 0 16px 36px rgba(225, 29, 72, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Kantumruy Pro', 'Battambang', sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  line-height: 1.5;
+  padding-bottom: 90px;
+  overflow-x: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #fda4af;
+  border-radius: 10px;
+}
+
+/* Header & Banner */
+.shop-header {
+  background: linear-gradient(145deg, #ffffff 0%, #fff1f2 100%);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.brand-gradient {
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glow-btn {
+  background: var(--primary-gradient);
+  box-shadow: 0 4px 14px rgba(225, 29, 72, 0.35);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glow-btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 8px rgba(225, 29, 72, 0.25);
+}
+
+/* Category Tabs */
+.category-tab {
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+.category-tab.active {
+  background: var(--primary-gradient);
+  color: white;
+  box-shadow: 0 4px 12px rgba(225, 29, 72, 0.25);
+  border-color: transparent;
+}
+
+/* Product Card */
+.product-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: white;
+  border: 1px solid #ffe4e6;
+}
+.product-card:active {
+  transform: scale(0.985);
+}
+
+/* Floating Cart Bar */
+.cart-floating-bar {
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Bottom Sheet / Modal Animations */
+.modal-backdrop {
+  backdrop-filter: blur(4px);
+  background-color: rgba(15, 23, 42, 0.45);
+  transition: opacity 0.3s ease;
+}
+
+.bottom-sheet {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  max-height: 90vh;
+}
+
+.bottom-sheet.closed {
+  transform: translateY(100%);
+}
+
+.bottom-sheet.open {
+  transform: translateY(0);
+}
+
+/* Bounce Badge */
+@keyframes pulse-badge {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+.pulse-badge {
+  animation: pulse-badge 2s infinite ease-in-out;
+}
+
+/* Input Fields */
+input, textarea, select {
+  font-family: inherit;
+}
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.15) !important;
+}
+
+/* KHQR Card */
+.khqr-box {
+  background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+  color: white;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.khqr-box::after {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -30%;
+  width: 140px;
+  height: 140px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+}

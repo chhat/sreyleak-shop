@@ -1,0 +1,14 @@
+{
+  "name": "sreyleak-cosmetics-tg-shop",
+  "version": "1.0.0",
+  "description": "Telegram Mini App & Shop for ស្រីល័ក្ខ គ្រឿងក្រអូប (Sreyleak Beauty Store)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "bot:node": "node bot/index.js",
+    "bot:py": "python bot/bot.py"
+  },
+  "keywords": ["telegram-mini-app", "telegram-shop", "cambodia", "cosmetics"],
+  "author": "Sreyleak Beauty Store",
+  "license": "MIT"
+}
