@@ -43,6 +43,10 @@ const server = http.createServer((req, res) => {
 const PRODUCTS = ${JSON.stringify(products, null, 2)};
 
 const STORE_CONFIG = ${JSON.stringify(config, null, 2)};
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { PRODUCTS, STORE_CONFIG };
+}
 `;
 
         const productsFilePath = path.join(__dirname, 'js', 'products.js');

@@ -637,6 +637,10 @@
 const PRODUCTS = ${JSON.stringify(adminProducts, null, 2)};
 
 const STORE_CONFIG = ${JSON.stringify(adminConfig, null, 2)};
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { PRODUCTS, STORE_CONFIG };
+}
 `;
     }
 

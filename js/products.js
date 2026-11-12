@@ -392,3 +392,7 @@ const STORE_CONFIG = {
   }
 };
 
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { PRODUCTS, STORE_CONFIG };
+}
+
