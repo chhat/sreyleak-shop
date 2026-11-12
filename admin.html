@@ -75,8 +75,12 @@
           <h1 class="text-sm font-black text-gray-900 flex items-center gap-1.5">
             <span>🌸 ស្រីល័ក្ខ គ្រឿងក្រអូប</span>
             <span class="bg-rose-100 text-rose-700 text-[10px] font-bold px-2 py-0.5 rounded-full">ADMIN</span>
+            <span id="local-mode-badge" class="hidden bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              PC Auto-Sync
+            </span>
           </h1>
-          <p class="text-[11px] text-gray-500">គ្រប់គ្រងទំនិញ និងព័ត៌មានហាង</p>
+          <p class="text-[11px] text-gray-500">គ្រប់គ្រងទំនិញ និងព័ត៌មានហាងនៅលើកុំព្យូទ័រ</p>
         </div>
       </div>
 
@@ -365,6 +369,11 @@
 
     // Initialize Products Data
     function initData() {
+      const isLocalPC = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      if (isLocalPC) {
+        document.getElementById('local-mode-badge')?.classList.remove('hidden');
+      }
+
       const savedProds = localStorage.getItem('sreyleak_custom_products');
       if (savedProds) {
         try { adminProducts = JSON.parse(savedProds); } catch(e) { adminProducts = PRODUCTS; }
@@ -577,10 +586,15 @@
       }
     }
 
-    // Save to LocalStorage
+    // Save to LocalStorage & Auto-sync to local PC file if on localhost
     function saveLocal() {
       localStorage.setItem('sreyleak_custom_products', JSON.stringify(adminProducts));
       localStorage.setItem('sreyleak_custom_config', JSON.stringify(adminConfig));
+      
+      const isLocalPC = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      if (isLocalPC) {
+        saveDirectToFile(true);
+      }
     }
 
     // Config UI
