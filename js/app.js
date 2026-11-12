@@ -531,9 +531,14 @@ function submitOrder(e) {
       : 'ABA PAY / KHQR (https://link.payway.com.kh/ABAPAYRz567848B)',
     abaPayLink: state.paymentMethod === 'khqr' ? (cfg.abaPayLink || 'https://link.payway.com.kh/ABAPAYRz567848B') : null,
     items: state.cart.map(i => ({
+      id: i.product.id,
       name: i.product.name,
+      categoryName: i.product.categoryName || '',
+      size: i.product.size || '',
+      image: i.product.image || '',
       qty: i.qty,
       priceUSD: i.product.priceUSD,
+      priceKHR: i.product.priceKHR || (i.product.priceUSD * exchangeRate),
       totalUSD: i.product.priceUSD * i.qty
     })),
     subtotalUSD,
@@ -569,8 +574,9 @@ function submitOrder(e) {
 // Generate Formatted Telegram Order Text
 function generateTelegramOrderMessage(order) {
   const itemsText = order.items.map((it, idx) => 
-    `  ${idx + 1}. ${it.name}\n     ចំនួន: ${it.qty} | តម្លៃ: $${it.totalUSD.toFixed(2)}`
-  ).join('\n');
+    `  ${idx + 1}. ${it.name} ${it.size ? `(${it.size})` : ''}\n     ចំនួន: ${it.qty} x $${it.priceUSD.toFixed(2)} = $${it.totalUSD.toFixed(2)}` +
+    (it.image ? `\n     🖼️ រូបភាព: ${it.image}` : '')
+  ).join('\n\n');
 
   return `🌸 ការបញ្ជាទិញថ្មីពីហាង ស្រីល័ក្ខ 🌸
 -----------------------------------

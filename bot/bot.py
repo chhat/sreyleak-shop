@@ -44,6 +44,15 @@ def send_message(chat_id, text, reply_markup=None):
         body["reply_markup"] = reply_markup
     return tg_api("sendMessage", body)
 
+def send_photo(chat_id, photo, caption=None):
+    body = {
+        "chat_id": chat_id,
+        "photo": photo,
+        "caption": caption or "",
+        "parse_mode": "HTML"
+    }
+    return tg_api("sendPhoto", body)
+
 def handle_start(chat_id, first_name):
     welcome = (
         f"🌸 <b>សូមស្វាគមន៍មកកាន់ ហាង ស្រីល័ក្ខ គ្រឿងក្រអូប!</b> 🌸\n"
@@ -98,6 +107,45 @@ def handle_web_app_data(chat_id, raw_data):
             f"📞 ទំនាក់ទំនងសាកសួរ: <b>096 236 4475</b>"
         )
         send_message(chat_id, receipt)
+
+        # Notify Admin with photos
+        if ADMIN_CHAT_ID:
+            admin_msg = (
+                f"🚨 <b>មានការកុម្ម៉ង់ទំនិញថ្មី! (New Order)</b> 🚨\n"
+                f"----------------------------------------\n"
+                f"🔖 <b>កូដ:</b> <code>{order.get('orderId')}</code>\n"
+                f"👤 <b>អតិថិជន:</b> {order['customer']['name']}\n"
+                f"📞 <b>ទូរស័ព្ទ:</b> <code>{order['customer']['phone']}</code>\n"
+                f"📍 <b>ទីតាំង:</b> {order['customer']['location']} ({order.get('deliveryType')})\n"
+                f"💵 <b>សរុប:</b> <b>${order.get('grandTotalUSD', 0):.2f}</b>\n"
+                f"💳 <b>ទូទាត់:</b> {order.get('paymentMethod')}\n"
+                f"----------------------------------------\n"
+                f"🛍️ <b>បញ្ជីទំនិញ:</b>\n"
+            )
+            for idx, item in enumerate(order.get('items', []), 1):
+                admin_msg += f"  {idx}. <b>{item['name']}</b> ({item.get('size','')})\n     ចំនួន: {item['qty']} x ${item['priceUSD']:.2f} = ${item['totalUSD']:.2f}\n"
+
+            admin_kb = {
+                "inline_keyboard": [
+                    [
+                        {"text": f"📞 Call: {order['customer']['phone']}", "url": f"tel:{order['customer']['phone']}"},
+                        {"text": "💬 Chat", "url": f"tg://user?id={chat_id}"}
+                    ]
+                ]
+            }
+            send_message(ADMIN_CHAT_ID, admin_msg, admin_kb)
+
+            # Send photos of products to Admin
+            for item in order.get('items', []):
+                if item.get('image'):
+                    caption = (
+                        f"🛍️ <b>{item['name']}</b>\n"
+                        f"🔢 ចំនួនកុម្ម៉ង់: <b>{item['qty']}</b> {item.get('size','')}\n"
+                        f"💵 តម្លៃរាយ: <b>${item['priceUSD']:.2f}</b>\n"
+                        f"💰 សរុបមុខនេះ: <b>${item['totalUSD']:.2f}</b>\n"
+                        f"🔖 សម្រាប់កូដ: <code>{order.get('orderId')}</code>"
+                    )
+                    send_photo(ADMIN_CHAT_ID, item['image'], caption)
     except Exception as e:
         print("Error handling order:", e)
 

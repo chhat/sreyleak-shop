@@ -42,6 +42,22 @@ async function sendMessage(chatId, text, extra = {}) {
   });
 }
 
+// ផ្ញើរូបភាព (sendPhoto)
+async function sendPhoto(chatId, photo, caption = '', extra = {}) {
+  try {
+    return await tgApi('sendPhoto', {
+      chat_id: chatId,
+      photo: photo,
+      caption: caption,
+      parse_mode: 'HTML',
+      ...extra
+    });
+  } catch (err) {
+    console.error("sendPhoto error:", err.message);
+    return { ok: false, error: err.message };
+  }
+}
+
 // ឆ្លើយតបសារ /start
 async function handleStart(chatId, firstName) {
   const isAdmin = String(chatId) === String(ADMIN_CHAT_ID);
@@ -126,29 +142,52 @@ async function handleWebAppData(chatId, rawData, user) {
 
     // ប្រសិនបើមានដាក់ ADMIN_CHAT_ID នោះវានឹងផ្ញើដំណឹងទៅកាន់ Telegram ម្ចាស់ហាងភ្លាមៗ
     if (ADMIN_CHAT_ID) {
-      const adminNotice = `🚨 <b>មានការកុម្ម៉ង់ទំនិញថ្មី! (New Order)</b> 🚨\n` +
+      let adminNotice = `🚨 <b>មានការកុម្ម៉ង់ទំនិញថ្មី! (New Order)</b> 🚨\n` +
         `----------------------------------------\n` +
-        `🔖 <b>កូដ:</b> <code>${order.orderId}</code>\n` +
-        `👤 <b>អតិថិជន:</b> ${order.customer.name} (@${user.username || 'no_user'})\n` +
+        `🔖 <b>កូដបញ្ជាទិញ:</b> <code>${order.orderId}</code>\n` +
+        `📅 <b>កាលបរិច្ឆេទ:</b> ${order.date}\n\n` +
+        `👤 <b>អតិថិជន:</b> <b>${order.customer.name}</b> (@${user.username || 'no_user'})\n` +
         `📞 <b>ទូរស័ព្ទ:</b> <code>${order.customer.phone}</code>\n` +
-        `📍 <b>ទីតាំង:</b> ${order.customer.location} (${order.deliveryType})\n` +
+        `📍 <b>ទីតាំងដឹក:</b> ${order.customer.location} (${order.deliveryType})\n` +
         (order.customer.notes ? `📝 <b>ចំណាំ:</b> ${order.customer.notes}\n` : '') +
-        `💵 <b>សរុប:</b> <b>$${order.grandTotalUSD.toFixed(2)}</b>\n` +
-        `💳 <b>វិធីទូទាត់:</b> ${order.paymentMethod}\n` +
         `----------------------------------------\n` +
-        `🛍️ <b>ទំនិញ:</b>\n` +
-        order.items.map(i => `• ${i.name} (${i.qty} មុខ)`).join('\n');
+        `🛍️ <b>បញ្ជីទំនិញ (${order.items.length} មុខ):</b>\n`;
+
+      order.items.forEach((it, idx) => {
+        adminNotice += `  ${idx + 1}. <b>${it.name}</b>\n     ចំនួន: <b>${it.qty}</b> ${it.size ? `(${it.size})` : ''} | តម្លៃរាយ: $${it.priceUSD.toFixed(2)} | សរុប: <b>$${it.totalUSD.toFixed(2)}</b>\n`;
+      });
+
+      adminNotice += `----------------------------------------\n` +
+        `🚚 <b>ថ្លៃដឹកជញ្ជូន:</b> $${order.deliveryFeeUSD.toFixed(2)}\n` +
+        `💵 <b>សរុបទឹកប្រាក់ត្រូវទារ:</b> <b>$${order.grandTotalUSD.toFixed(2)}</b> (${order.grandTotalKHR.toLocaleString()} ៛)\n` +
+        `💳 <b>វិធីទូទាត់:</b> ${order.paymentMethod}\n` +
+        (order.abaPayLink ? `📲 <b>ABA Link:</b> ${order.abaPayLink}\n` : '') +
+        `\n👇 <i>(រូបភាពផលិតផលនីមួយៗ និងតម្លៃត្រូវបានផ្ញើជូនខាងក្រោម)</i>`;
 
       const adminKeyboard = {
         inline_keyboard: [
           [
             { text: `📞 Call: ${order.customer.phone}`, url: `tel:${order.customer.phone}` },
-            { text: `💬 Chat User`, url: `tg://user?id=${chatId}` }
+            { text: `💬 Chat អតិថិជន`, url: `tg://user?id=${chatId}` }
           ]
         ]
       };
 
+      // ១. ផ្ញើសារសង្ខេបវិក្កយបត្រទៅកាន់ Admin
       await sendMessage(ADMIN_CHAT_ID, adminNotice, { reply_markup: adminKeyboard });
+
+      // ២. ផ្ញើរូបភាពផលិតផលនីមួយៗ + តម្លៃទៅកាន់ Admin
+      for (const item of order.items) {
+        if (item.image) {
+          const photoCaption = `🛍️ <b>${item.name}</b>\n` +
+            `🔢 ចំនួនកុម្ម៉ង់: <b>${item.qty}</b> ${item.size ? `(${item.size})` : ''}\n` +
+            `💵 តម្លៃរាយ: <b>$${item.priceUSD.toFixed(2)}</b>\n` +
+            `💰 សរុបមុខនេះ: <b>$${item.totalUSD.toFixed(2)}</b> (${(item.totalUSD * 4000).toLocaleString()} ៛)\n` +
+            `🔖 សម្រាប់កូដ: <code>${order.orderId}</code>`;
+
+          await sendPhoto(ADMIN_CHAT_ID, item.image, photoCaption);
+        }
+      }
     }
 
   } catch (err) {
