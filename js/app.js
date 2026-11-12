@@ -552,6 +552,15 @@ function submitOrder(e) {
   // Format Receipt text for Telegram
   const orderText = generateTelegramOrderMessage(orderData);
 
+  // Send to PC Server API if running on localhost or accessible
+  try {
+    fetch('/api/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(orderData)
+    }).catch(e => console.log('PC API sync note:', e.message));
+  } catch(e) {}
+
   // If inside Telegram WebApp, send data back to the bot
   if (tg && tg.sendData) {
     try {

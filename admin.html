@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard | ស្រីល័ក្ខ គ្រឿងក្រអូប</title>
+  <title>ផ្ទាំងគ្រប់គ្រង Admin លើ PC | ស្រីល័ក្ខ គ្រឿងក្រអូប</title>
   
-  <!-- Tailwind CSS -->
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/style.css" />
 
@@ -32,7 +32,7 @@
     }
   </script>
 </head>
-<body class="bg-gray-50 text-gray-800 antialiased min-h-screen pb-12">
+<body class="bg-gray-100 text-gray-800 antialiased min-h-screen pb-12 font-sans">
 
   <!-- ================= PIN AUTH MODAL ================= -->
   <div id="auth-modal" class="fixed inset-0 z-50 bg-gray-900/80 backdrop-blur-sm flex items-center justify-center p-4">
@@ -40,7 +40,7 @@
       <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-3 text-3xl">
         🔐
       </div>
-      <h2 class="text-base font-bold text-gray-900">ផ្ទាំងគ្រប់គ្រង Admin</h2>
+      <h2 class="text-base font-bold text-gray-900">ផ្ទាំងគ្រប់គ្រង Admin (PC Edition)</h2>
       <p class="text-xs text-gray-500 mt-1 mb-4">សូមបញ្ចូលលេខកូដសម្ងាត់ (PIN) ដើម្បីចូលប្រើប្រាស់</p>
       
       <input 
@@ -66,21 +66,21 @@
 
   <!-- ================= TOP ADMIN NAVBAR ================= -->
   <header class="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-sm">
-    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+    <div class="max-w-7xl mx-auto px-4 py-2.5 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <a href="index.html" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold text-sm hover:bg-rose-100" title="ត្រឡប់ទៅហាង">
-          ←
-        </a>
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-rose-500 to-pink-400 p-0.5 shadow-md flex items-center justify-center text-xl text-white">
+          🌸
+        </div>
         <div>
-          <h1 class="text-sm font-black text-gray-900 flex items-center gap-1.5">
-            <span>🌸 ស្រីល័ក្ខ គ្រឿងក្រអូប</span>
-            <span class="bg-rose-100 text-rose-700 text-[10px] font-bold px-2 py-0.5 rounded-full">ADMIN</span>
-            <span id="local-mode-badge" class="hidden bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+          <h1 class="text-sm font-black text-gray-900 flex items-center gap-2">
+            <span>ស្រីល័ក្ខ គ្រឿងក្រអូប</span>
+            <span class="bg-rose-100 text-rose-700 text-[10px] font-bold px-2 py-0.5 rounded-full">PC ADMIN</span>
+            <span class="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-              PC Auto-Sync
+              Live PC Server
             </span>
           </h1>
-          <p class="text-[11px] text-gray-500">គ្រប់គ្រងទំនិញ និងព័ត៌មានហាងនៅលើកុំព្យូទ័រ</p>
+          <p class="text-[11px] text-gray-500">ប្រព័ន្ធគ្រប់គ្រងទំនិញ, ការកុម្ម៉ង់ & Customer Chats លើកុំព្យូទ័រ</p>
         </div>
       </div>
 
@@ -88,49 +88,172 @@
         <a 
           href="index.html" 
           target="_blank" 
-          class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold px-3 py-1.5 rounded-xl flex items-center gap-1"
+          class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold px-3 py-2 rounded-xl flex items-center gap-1.5 transition"
         >
-          <span>👁️ មើលហាង</span>
+          <span>👁️ មើលហាងទំនិញ</span>
         </a>
         <button 
           onclick="openAddModal()" 
-          class="glow-btn text-white text-xs font-bold px-3.5 py-1.5 rounded-xl flex items-center gap-1 shadow"
+          class="glow-btn text-white text-xs font-bold px-3.5 py-2 rounded-xl flex items-center gap-1.5 shadow"
         >
-          <span>➕ បន្ថែមទំនិញថ្មី</span>
+          <span>➕ បន្ថែមទំនិញ</span>
         </button>
       </div>
     </div>
 
     <!-- Navigation Tabs -->
-    <div class="max-w-5xl mx-auto px-4 flex gap-4 border-t border-gray-100 text-xs font-bold">
-      <button onclick="switchTab('products')" id="tab-btn-products" class="tab-btn active py-2.5 text-rose-600 border-b-2 border-rose-600 flex items-center gap-1.5">
-        <span>🛍️ បញ្ជីទំនិញ</span>
-        <span id="product-count-badge" class="bg-rose-100 text-rose-700 text-[10px] px-1.5 py-0.2 rounded-full">0</span>
+    <div class="max-w-7xl mx-auto px-4 flex gap-6 border-t border-gray-100 text-xs font-bold overflow-x-auto">
+      <button onclick="switchTab('dashboard')" id="tab-btn-dashboard" class="tab-btn active py-3 text-rose-600 border-b-2 border-rose-600 flex items-center gap-1.5 whitespace-nowrap">
+        <span>📊 ផ្ទាំងសង្ខេប</span>
       </button>
-      <button onclick="switchTab('settings')" id="tab-btn-settings" class="tab-btn py-2.5 text-gray-500 hover:text-gray-800 flex items-center gap-1.5">
+      <button onclick="switchTab('orders')" id="tab-btn-orders" class="tab-btn py-3 text-gray-500 hover:text-gray-800 flex items-center gap-1.5 whitespace-nowrap">
+        <span>📦 ការបញ្ជាទិញ</span>
+        <span id="orders-badge" class="bg-rose-600 text-white text-[10px] px-1.5 py-0.2 rounded-full font-black">0</span>
+      </button>
+      <button onclick="switchTab('products')" id="tab-btn-products" class="tab-btn py-3 text-gray-500 hover:text-gray-800 flex items-center gap-1.5 whitespace-nowrap">
+        <span>🛍️ គ្រប់គ្រងទំនិញ</span>
+        <span id="product-count-badge" class="bg-gray-200 text-gray-700 text-[10px] px-1.5 py-0.2 rounded-full">0</span>
+      </button>
+      <button onclick="switchTab('chats')" id="tab-btn-chats" class="tab-btn py-3 text-gray-500 hover:text-gray-800 flex items-center gap-1.5 whitespace-nowrap">
+        <span>💬 សារអតិថិជន (Live Chats)</span>
+        <span id="chats-unread-badge" class="hidden bg-blue-600 text-white text-[10px] px-1.5 py-0.2 rounded-full font-black">0</span>
+      </button>
+      <button onclick="switchTab('settings')" id="tab-btn-settings" class="tab-btn py-3 text-gray-500 hover:text-gray-800 flex items-center gap-1.5 whitespace-nowrap">
         <span>⚙️ ការកំណត់ហាង & KHQR</span>
-      </button>
-      <button onclick="switchTab('export')" id="tab-btn-export" class="tab-btn py-2.5 text-gray-500 hover:text-gray-800 flex items-center gap-1.5">
-        <span>💾 រក្សាទុក & Export</span>
       </button>
     </div>
   </header>
 
   <!-- ================= MAIN ADMIN CONTENT ================= -->
-  <main class="max-w-5xl mx-auto px-4 py-5">
+  <main class="max-w-7xl mx-auto px-4 py-5">
 
-    <!-- TAB 1: PRODUCTS MANAGER -->
-    <section id="tab-products" class="space-y-4">
+    <!-- ================= TAB 1: DASHBOARD OVERVIEW ================= -->
+    <section id="tab-dashboard" class="space-y-5">
+      <!-- 4 Stat Cards -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Card 1 -->
+        <div class="bg-white p-4 rounded-3xl border border-gray-200 shadow-sm flex items-center justify-between">
+          <div>
+            <div class="text-[11px] font-bold text-gray-500">ចំណូលសរុប (Total Revenue)</div>
+            <div id="stat-revenue" class="text-xl font-black text-rose-600 mt-1">$0.00</div>
+            <div id="stat-revenue-khr" class="text-[11px] text-gray-400 font-medium">(0 ៛)</div>
+          </div>
+          <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-2xl font-bold">
+            💵
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-white p-4 rounded-3xl border border-gray-200 shadow-sm flex items-center justify-between">
+          <div>
+            <div class="text-[11px] font-bold text-gray-500">ការកុម្ម៉ង់សរុប (Orders)</div>
+            <div id="stat-orders" class="text-xl font-black text-gray-900 mt-1">0</div>
+            <div class="text-[11px] text-emerald-600 font-semibold">រក្សាទុកក្នុង PC</div>
+          </div>
+          <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-2xl">
+            📦
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bg-white p-4 rounded-3xl border border-gray-200 shadow-sm flex items-center justify-between">
+          <div>
+            <div class="text-[11px] font-bold text-gray-500">កំពុងរង់ចាំ (Pending)</div>
+            <div id="stat-pending" class="text-xl font-black text-amber-600 mt-1">0</div>
+            <div class="text-[11px] text-amber-500 font-medium">ត្រូវការការបញ្ជាក់</div>
+          </div>
+          <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-2xl">
+            ⏳
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="bg-white p-4 rounded-3xl border border-gray-200 shadow-sm flex items-center justify-between">
+          <div>
+            <div class="text-[11px] font-bold text-gray-500">អតិថិជនសរុប (Customers)</div>
+            <div id="stat-customers" class="text-xl font-black text-indigo-600 mt-1">0</div>
+            <div class="text-[11px] text-gray-400 font-medium">តាមលេខទូរស័ព្ទ</div>
+          </div>
+          <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center text-2xl">
+            👥
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Orders Table -->
+      <div class="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-gray-100 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-base">🛍️</span>
+            <h3 class="text-xs font-bold text-gray-900 uppercase tracking-wider">ការកុម្ម៉ង់ចុងក្រោយ (Recent Orders)</h3>
+          </div>
+          <button onclick="switchTab('orders')" class="text-xs text-rose-600 font-bold hover:underline">
+            មើលទាំងអស់ →
+          </button>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-gray-50 text-gray-500 uppercase text-[10px] font-bold">
+              <tr>
+                <th class="p-3">កូដបញ្ជាទិញ</th>
+                <th class="p-3">អតិថិជន</th>
+                <th class="p-3">លេខទូរស័ព្ទ</th>
+                <th class="p-3">ទំនិញ</th>
+                <th class="p-3">សរុបទឹកប្រាក់</th>
+                <th class="p-3">វិធីទូទាត់</th>
+                <th class="p-3">ស្ថានភាព</th>
+              </tr>
+            </thead>
+            <tbody id="dashboard-recent-orders" class="divide-y divide-gray-100">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TAB 2: ORDERS MANAGER ================= -->
+    <section id="tab-orders" class="hidden space-y-4">
       <!-- Search & Filters -->
+      <div class="bg-white p-4 rounded-3xl border border-gray-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-3">
+        <div class="relative w-full md:w-80">
+          <input 
+            type="text" 
+            id="orders-search" 
+            placeholder="ស្វែងរកតាមឈ្មោះ, លេខទូរស័ព្ទ, ឬកូដ..." 
+            class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-9 pr-3 py-2 text-xs outline-none focus:border-rose-500"
+          />
+          <span class="absolute left-3 top-2.5 text-gray-400 text-xs">🔍</span>
+        </div>
+
+        <div class="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto text-xs font-bold">
+          <button onclick="filterOrdersByStatus('all')" class="order-status-pill active px-3 py-1.5 rounded-xl border border-rose-600 bg-rose-50 text-rose-600">ទាំងអស់</button>
+          <button onclick="filterOrdersByStatus('pending')" class="order-status-pill px-3 py-1.5 rounded-xl border border-gray-200 bg-white text-gray-600">🟡 រង់ចាំ</button>
+          <button onclick="filterOrdersByStatus('confirmed')" class="order-status-pill px-3 py-1.5 rounded-xl border border-gray-200 bg-white text-gray-600">🔵 បញ្ជាក់</button>
+          <button onclick="filterOrdersByStatus('shipped')" class="order-status-pill px-3 py-1.5 rounded-xl border border-gray-200 bg-white text-gray-600">🚚 កំពុងដឹក</button>
+          <button onclick="filterOrdersByStatus('completed')" class="order-status-pill px-3 py-1.5 rounded-xl border border-gray-200 bg-white text-gray-600">🟢 បញ្ចប់</button>
+          <button onclick="filterOrdersByStatus('cancelled')" class="order-status-pill px-3 py-1.5 rounded-xl border border-gray-200 bg-white text-gray-600">🔴 បោះបង់</button>
+        </div>
+      </div>
+
+      <!-- Orders Cards Grid -->
+      <div id="orders-list-container" class="space-y-3">
+        <!-- Injected dynamically -->
+      </div>
+    </section>
+
+    <!-- ================= TAB 3: PRODUCTS & STOCK ================= -->
+    <section id="tab-products" class="hidden space-y-4">
       <div class="bg-white p-3.5 rounded-2xl border border-gray-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
         <div class="relative w-full sm:w-72">
           <input 
             type="text" 
             id="admin-search" 
             placeholder="ស្វែងរកតាមឈ្មោះទំនិញ..." 
-            class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-8 pr-3 py-1.5 text-xs text-gray-800 outline-none focus:border-rose-500"
+            class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-8 pr-3 py-2 text-xs text-gray-800 outline-none focus:border-rose-500"
           />
-          <span class="absolute left-2.5 top-2 text-gray-400 text-xs">🔍</span>
+          <span class="absolute left-2.5 top-2.5 text-gray-400 text-xs">🔍</span>
         </div>
 
         <div class="flex items-center gap-2 overflow-x-auto w-full sm:w-auto text-xs">
@@ -142,13 +265,81 @@
         </div>
       </div>
 
-      <!-- Products Table / Cards -->
+      <!-- Products Grid -->
       <div id="admin-products-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         <!-- Rendered dynamically -->
       </div>
     </section>
 
-    <!-- TAB 2: STORE SETTINGS -->
+    <!-- ================= TAB 4: LIVE CUSTOMER CHATS ================= -->
+    <section id="tab-chats" class="hidden">
+      <div class="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden grid grid-cols-1 md:grid-cols-3 min-h-[580px]">
+        
+        <!-- Left: Customer Conversations List -->
+        <div class="border-r border-gray-200 flex flex-col">
+          <div class="p-3 border-b border-gray-100 bg-gray-50">
+            <h3 class="text-xs font-bold text-gray-800 flex items-center justify-between">
+              <span>💬 បញ្ជីសារអតិថិជន (Customers)</span>
+              <span id="total-chats-count" class="bg-gray-200 text-gray-700 text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
+            </h3>
+          </div>
+
+          <div id="chats-users-list" class="flex-1 overflow-y-auto divide-y divide-gray-100 max-h-[520px]">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Right: Message Thread & Reply Box -->
+        <div class="col-span-2 flex flex-col bg-gray-50/50">
+          <!-- Chat Thread Header -->
+          <div id="active-chat-header" class="p-3 border-b border-gray-200 bg-white flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-sm">
+                👤
+              </div>
+              <div>
+                <h4 id="active-chat-name" class="text-xs font-bold text-gray-900">សូមជ្រើសរើសអតិថិជន</h4>
+                <div id="active-chat-info" class="text-[10px] text-gray-400">Telegram Chat</div>
+              </div>
+            </div>
+            <div id="active-chat-actions" class="hidden flex items-center gap-2">
+              <a id="btn-tg-chat-link" href="#" target="_blank" class="bg-[#229ED9] text-white text-[11px] font-bold px-3 py-1.5 rounded-xl shadow-sm">
+                ✈️ បើក Telegram
+              </a>
+            </div>
+          </div>
+
+          <!-- Messages Area -->
+          <div id="active-chat-messages" class="flex-1 p-4 space-y-3 overflow-y-auto max-h-[440px]">
+            <div class="py-20 text-center text-gray-400 text-xs">
+              💬 សូមចុចលើអតិថិជនណាម្នាក់នៅខាងឆ្វេង ដើម្បីមើលសារ និងឆ្លើយតប
+            </div>
+          </div>
+
+          <!-- Reply Box -->
+          <div id="chat-reply-container" class="hidden p-3 bg-white border-t border-gray-200">
+            <form id="chat-reply-form" onsubmit="sendCustomerReply(event)" class="flex gap-2">
+              <input 
+                type="text" 
+                id="chat-reply-input" 
+                required 
+                placeholder="វាយសារឆ្លើយតបទៅ Telegram អតិថិជន..." 
+                class="flex-1 bg-gray-100 border border-gray-200 rounded-xl px-3 py-2 text-xs outline-none focus:border-rose-500"
+              />
+              <button 
+                type="submit" 
+                class="glow-btn text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1 shadow"
+              >
+                <span>✉️ ផ្ញើសារ</span>
+              </button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================= TAB 5: STORE SETTINGS ================= -->
     <section id="tab-settings" class="hidden max-w-xl mx-auto space-y-4">
       <div class="bg-white p-5 rounded-3xl border border-gray-200 shadow-sm space-y-4">
         <h3 class="text-sm font-bold text-gray-900 border-b border-gray-100 pb-2 flex items-center gap-2">
@@ -204,50 +395,6 @@
       </div>
     </section>
 
-    <!-- TAB 3: EXPORT & SYNC -->
-    <section id="tab-export" class="hidden max-w-xl mx-auto space-y-4">
-      <div class="bg-white p-5 rounded-3xl border border-gray-200 shadow-sm space-y-4">
-        <h3 class="text-sm font-bold text-gray-900 border-b border-gray-100 pb-2 flex items-center gap-2">
-          <span>💾</span>
-          <span>រក្សាទុកទិន្នន័យ (Sync & Export)</span>
-        </h3>
-
-        <p class="text-xs text-gray-600 leading-relaxed">
-          នៅពេលលោកអ្នកកែសម្រួលទំនិញក្នុងផ្ទាំងនេះ ទិន្នន័យត្រូវបានរក្សាទុកដោយស្វ័យប្រវត្តិក្នុង Browser។ ដើម្បីរក្សាទុកជាអចិន្ត្រៃយ៍ចូលក្នុងកូដហាង សូមជ្រើសរើសជម្រើសខាងក្រោម៖
-        </p>
-
-        <div class="space-y-2.5">
-          <button onclick="saveDirectToFile()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white p-3 rounded-2xl font-bold text-xs flex items-center justify-between shadow">
-            <div class="text-left">
-              <div>⚡ រក្សាទុកផ្ទាល់ទៅកាន់ឯកសារ js/products.js (Auto Save)</div>
-              <div class="text-[10px] text-emerald-100 font-normal">ដំណើរការនៅពេល run លើកុំព្យូទ័រ (Local Server)</div>
-            </div>
-            <span>→</span>
-          </button>
-
-          <button onclick="copyGeneratedCode()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 p-3 rounded-2xl font-bold text-xs flex items-center justify-between">
-            <div class="text-left">
-              <div>📋 ចម្លងកូដ JS (Copy Code to Clipboard)</div>
-              <div class="text-[10px] text-gray-500 font-normal">អាច paste ជំនួសក្នុងឯកសារ js/products.js ដោយផ្ទាល់</div>
-            </div>
-            <span>📋</span>
-          </button>
-
-          <button onclick="downloadProductsFile()" class="w-full bg-rose-50 hover:bg-rose-100 text-rose-700 p-3 rounded-2xl font-bold text-xs flex items-center justify-between border border-rose-200">
-            <div class="text-left">
-              <div>📥 ទាញយកឯកសារ products.js (Download File)</div>
-              <div class="text-[10px] text-gray-500 font-normal">ទាញយកមកដាក់ក្នុង Folder js/</div>
-            </div>
-            <span>⬇️</span>
-          </button>
-        </div>
-
-        <div class="pt-3 border-t border-gray-100 text-[11px] text-gray-500">
-          💡 <b>ចំណាំ៖</b> បន្ទាប់ពីកែប្រែរួច លោកអ្នកអាច push ទៅ GitHub ដើម្បីឱ្យ GitHub Pages Update ភ្លាមៗបាន។
-        </div>
-      </div>
-    </section>
-
   </main>
 
   <!-- ================= ADD / EDIT PRODUCT MODAL ================= -->
@@ -289,7 +436,7 @@
             <input type="number" step="0.1" id="prod-price" required placeholder="ឧ. 12.00" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs" />
           </div>
           <div>
-            <label class="block text-xs font-bold text-gray-700 mb-1">តម្លៃដើមមុនបញ្ចុះ ($ Optional)</label>
+            <label class="block text-xs font-bold text-gray-700 mb-1">តម្លៃដើម ($ Optional)</label>
             <input type="number" step="0.1" id="prod-old-price" placeholder="ឧ. 15.00" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs" />
           </div>
         </div>
@@ -306,14 +453,12 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">Link រូបភាព (Image URL) <span class="text-rose-600">*</span></label>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Link រូបភាពផលិតផល (Image URL) <span class="text-rose-600">*</span></label>
           <input type="url" id="prod-image" required placeholder="https://images.unsplash.com/..." class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs" />
-          <div class="flex items-center gap-1.5 mt-1.5 text-[10px] text-gray-500 overflow-x-auto pb-1">
-            <span>រូបគំរូ៖</span>
-            <button type="button" onclick="setPresetImg('https://images.unsplash.com/photo-1608248597359-2e06a77d56e9?auto=format&fit=crop&w=600&q=80')" class="bg-gray-100 hover:bg-gray-200 px-2 py-0.5 rounded">🧴 សេរ៉ូម</button>
-            <button type="button" onclick="setPresetImg('https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80')" class="bg-gray-100 hover:bg-gray-200 px-2 py-0.5 rounded">💆 ហ្វូម</button>
-            <button type="button" onclick="setPresetImg('https://images.unsplash.com/photo-1526947425960-945c6e72858f?auto=format&fit=crop&w=600&q=80')" class="bg-gray-100 hover:bg-gray-200 px-2 py-0.5 rounded">🌸 ឡេខ្លួន</button>
-            <button type="button" onclick="setPresetImg('https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=600&q=80')" class="bg-gray-100 hover:bg-gray-200 px-2 py-0.5 rounded">✨ ទឹកអប់</button>
+          <!-- Live Preview -->
+          <div id="image-preview-container" class="mt-2 flex items-center gap-2">
+            <img id="image-preview" src="" alt="Preview" class="hidden w-16 h-16 rounded-xl object-cover border" />
+            <div class="text-[10px] text-gray-400">រូបភាពនឹងត្រូវផ្ញើផ្ទាល់ជូន Telegram ម្ចាស់ហាង</div>
           </div>
         </div>
 
@@ -323,7 +468,7 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">អត្ថប្រយោជន៍ (Benefits - បំបែកដោយសញ្ញាក្បៀស ",")</label>
+          <label class="block text-xs font-bold text-gray-700 mb-1">អត្ថប្រយោជន៍ (បំបែកដោយក្បៀស ",")</label>
           <input type="text" id="prod-benefits" placeholder="ឧ. ជួយឱ្យសក់ដុះលឿន, បំបាត់ជ្រុះ, ក្លិនក្រអូប" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs" />
         </div>
 
@@ -340,17 +485,50 @@
     </div>
   </div>
 
+  <!-- ================= ORDER DETAILS MODAL (PRINT INVOICE) ================= -->
+  <div id="order-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div onclick="closeOrderModal()" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm"></div>
+    <div class="relative z-10 bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+      <div class="p-4 border-b border-gray-100 flex items-center justify-between bg-rose-50/50">
+        <h3 class="text-sm font-bold text-gray-900 flex items-center gap-1.5">
+          <span>🧾 ព័ត៌មានវិក្កយបត្រ</span>
+          <span id="modal-order-id" class="text-rose-600 font-mono"></span>
+        </h3>
+        <button onclick="closeOrderModal()" class="w-7 h-7 rounded-full bg-white text-gray-500 font-bold hover:bg-gray-100 text-sm">✕</button>
+      </div>
+
+      <div id="order-modal-content" class="p-5 space-y-4 overflow-y-auto flex-1 text-xs">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <div class="p-4 border-t border-gray-100 bg-gray-50 flex gap-2">
+        <button onclick="printOrderInvoice()" class="flex-1 bg-gray-900 hover:bg-gray-800 text-white py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow">
+          <span>🖨️</span>
+          <span>ព្រីនវិក្កយបត្រ (Print)</span>
+        </button>
+        <button onclick="closeOrderModal()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2.5 rounded-xl text-xs font-bold">
+          បិទ
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast -->
   <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-gray-900 text-white text-xs font-bold px-4 py-2 rounded-2xl shadow-xl opacity-0 pointer-events-none transition-all duration-300"></div>
 
-  <!-- Scripts -->
-  <script src="js/products.js"></script>
+  <!-- ================= JAVASCRIPT LOGIC ================= -->
   <script>
-    // PIN Check
     const ADMIN_PIN = "2364";
-    let adminProducts = [];
-    let adminConfig = {};
-    let currentFilter = 'all';
+    let state = {
+      products: [],
+      orders: [],
+      chats: {},
+      settings: {},
+      currentFilter: 'all',
+      orderStatusFilter: 'all',
+      activeChatId: null,
+      selectedOrder: null
+    };
 
     function verifyPin() {
       const pin = document.getElementById('admin-pin-input').value.trim();
@@ -362,34 +540,8 @@
       }
     }
 
-    // Auto login if already authenticated in session
     if (localStorage.getItem('sreyleak_admin_auth') === 'true') {
       document.getElementById('auth-modal').classList.add('hidden');
-    }
-
-    // Initialize Products Data
-    function initData() {
-      const isLocalPC = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      if (isLocalPC) {
-        document.getElementById('local-mode-badge')?.classList.remove('hidden');
-      }
-
-      const savedProds = localStorage.getItem('sreyleak_custom_products');
-      if (savedProds) {
-        try { adminProducts = JSON.parse(savedProds); } catch(e) { adminProducts = PRODUCTS; }
-      } else {
-        adminProducts = [...PRODUCTS];
-      }
-
-      const savedCfg = localStorage.getItem('sreyleak_custom_config');
-      if (savedCfg) {
-        try { adminConfig = JSON.parse(savedCfg); } catch(e) { adminConfig = STORE_CONFIG; }
-      } else {
-        adminConfig = { ...STORE_CONFIG };
-      }
-
-      loadConfigUI();
-      renderAdminProducts();
     }
 
     function showToast(msg) {
@@ -403,6 +555,24 @@
       }, 2000);
     }
 
+    // Play Chime Audio on New Order
+    function playChime() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+        osc.frequency.setValueAtTime(880, ctx.currentTime + 0.15); // A5
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.4);
+      } catch(e) {}
+    }
+
     // Switch Tabs
     function switchTab(tabId) {
       document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -410,50 +580,344 @@
         btn.classList.add('text-gray-500');
       });
       const activeBtn = document.getElementById(`tab-btn-${tabId}`);
-      activeBtn.classList.add('active', 'text-rose-600', 'border-b-2', 'border-rose-600');
-      activeBtn.classList.remove('text-gray-500');
+      if (activeBtn) {
+        activeBtn.classList.add('active', 'text-rose-600', 'border-b-2', 'border-rose-600');
+        activeBtn.classList.remove('text-gray-500');
+      }
 
-      ['products', 'settings', 'export'].forEach(t => {
+      ['dashboard', 'orders', 'products', 'chats', 'settings'].forEach(t => {
         const sec = document.getElementById(`tab-${t}`);
-        if (t === tabId) sec.classList.remove('hidden');
-        else sec.classList.add('hidden');
+        if (sec) {
+          if (t === tabId) sec.classList.remove('hidden');
+          else sec.classList.add('hidden');
+        }
       });
     }
 
-    // Filter by Category
+    // Load All Data from PC REST API
+    let prevOrdersCount = 0;
+    async function loadData() {
+      try {
+        // Stats
+        const statsRes = await fetch('/api/stats');
+        const statsData = await statsRes.json();
+        if (statsData.ok) {
+          renderStats(statsData.stats, statsData.recentOrders);
+        }
+
+        // Products
+        const prodRes = await fetch('/api/products');
+        const prodData = await prodRes.json();
+        if (prodData.ok) {
+          state.products = prodData.products;
+          renderProducts();
+        }
+
+        // Orders
+        const ordRes = await fetch('/api/orders');
+        const ordData = await ordRes.json();
+        if (ordData.ok) {
+          // Detect new orders for audio alert
+          if (prevOrdersCount > 0 && ordData.orders.length > prevOrdersCount) {
+            playChime();
+            showToast("🔔 មានការកុម្ម៉ង់ថ្មីបានចូលមក! (New Order)");
+          }
+          prevOrdersCount = ordData.orders.length;
+          state.orders = ordData.orders;
+          renderOrders();
+        }
+
+        // Chats
+        const chatRes = await fetch('/api/chats');
+        const chatData = await chatRes.json();
+        if (chatData.ok) {
+          state.chats = chatData.chats;
+          renderChatsList();
+        }
+
+        // Settings
+        const setRes = await fetch('/api/settings');
+        const setData = await setRes.json();
+        if (setData.ok) {
+          state.settings = setData.settings;
+          loadSettingsUI();
+        }
+
+      } catch (err) {
+        console.error("API load error:", err);
+      }
+    }
+
+    // Render Stats
+    function renderStats(stats, recentOrders) {
+      document.getElementById('stat-revenue').textContent = `$${stats.totalRevenueUSD.toFixed(2)}`;
+      document.getElementById('stat-revenue-khr').textContent = `(${stats.totalRevenueKHR.toLocaleString()} ៛)`;
+      document.getElementById('stat-orders').textContent = stats.totalOrders;
+      document.getElementById('stat-pending').textContent = stats.pendingOrders;
+      document.getElementById('stat-customers').textContent = stats.totalCustomers;
+      document.getElementById('orders-badge').textContent = stats.pendingOrders;
+
+      const recentContainer = document.getElementById('dashboard-recent-orders');
+      if (!recentOrders || recentOrders.length === 0) {
+        recentContainer.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-gray-400">មិនទាន់មានការកុម្ម៉ង់នៅឡើយទេ</td></tr>`;
+        return;
+      }
+
+      recentContainer.innerHTML = recentOrders.map(o => `
+        <tr class="hover:bg-rose-50/40 cursor-pointer" onclick="viewOrder('${o.orderId}')">
+          <td class="p-3 font-mono font-bold text-rose-600">${o.orderId}</td>
+          <td class="p-3 font-semibold text-gray-800">${o.customer.name}</td>
+          <td class="p-3">${o.customer.phone}</td>
+          <td class="p-3">${o.items.length} មុខ</td>
+          <td class="p-3 font-bold text-gray-900">$${o.grandTotalUSD.toFixed(2)}</td>
+          <td class="p-3"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${o.paymentMethod.includes('ABA') ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'}">${o.paymentMethod.includes('ABA') ? 'ABA PAY' : 'COD'}</span></td>
+          <td class="p-3">${renderStatusBadge(o.status)}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderStatusBadge(status) {
+      const badges = {
+        pending: '<span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full text-[10px] font-bold">🟡 កំពុងរង់ចាំ</span>',
+        confirmed: '<span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full text-[10px] font-bold">🔵 បានបញ្ជាក់</span>',
+        shipped: '<span class="bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full text-[10px] font-bold">🚚 កំពុងដឹក</span>',
+        completed: '<span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full text-[10px] font-bold">🟢 បានបញ្ចប់</span>',
+        cancelled: '<span class="bg-red-100 text-red-800 px-2 py-0.5 rounded-full text-[10px] font-bold">🔴 បានបោះបង់</span>'
+      };
+      return badges[status] || status;
+    }
+
+    // Render Orders
+    function filterOrdersByStatus(status) {
+      state.orderStatusFilter = status;
+      document.querySelectorAll('.order-status-pill').forEach(btn => {
+        btn.classList.remove('active', 'border-rose-600', 'bg-rose-50', 'text-rose-600');
+        btn.classList.add('border-gray-200', 'bg-white', 'text-gray-600');
+      });
+      event.target.classList.add('active', 'border-rose-600', 'bg-rose-50', 'text-rose-600');
+      event.target.classList.remove('border-gray-200', 'bg-white', 'text-gray-600');
+      renderOrders();
+    }
+
+    function renderOrders() {
+      const container = document.getElementById('orders-list-container');
+      const q = (document.getElementById('orders-search')?.value || '').toLowerCase().trim();
+
+      let list = state.orders;
+      if (state.orderStatusFilter !== 'all') {
+        list = list.filter(o => o.status === state.orderStatusFilter);
+      }
+      if (q) {
+        list = list.filter(o => 
+          o.orderId.toLowerCase().includes(q) || 
+          o.customer.name.toLowerCase().includes(q) || 
+          o.customer.phone.toLowerCase().includes(q)
+        );
+      }
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white p-12 rounded-3xl border border-gray-200 text-center text-gray-400">
+            <div class="text-3xl mb-2">📦</div>
+            <p class="text-xs font-bold">រកមិនឃើញការកុម្ម៉ង់ទេ</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = list.map(o => {
+        // Items thumbnails HTML (REAL PHOTOS)
+        const itemsThumbs = o.items.map(it => `
+          <div class="flex items-center gap-2 bg-gray-50 p-2 rounded-xl border border-gray-100">
+            ${it.image ? `<img src="${it.image}" alt="${it.name}" class="w-10 h-10 rounded-lg object-cover border flex-shrink-0" />` : '<div class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center">🛍️</div>'}
+            <div class="min-w-0 flex-1">
+              <div class="text-[11px] font-bold text-gray-800 truncate">${it.name}</div>
+              <div class="text-[10px] text-gray-500">${it.qty} x $${it.priceUSD.toFixed(2)} = <b class="text-rose-600">$${it.totalUSD.toFixed(2)}</b></div>
+            </div>
+          </div>
+        `).join('');
+
+        return `
+          <div class="bg-white p-4 rounded-3xl border border-gray-200 shadow-sm space-y-3">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-gray-100 pb-2.5">
+              <div class="flex items-center gap-2">
+                <span class="font-mono text-sm font-black text-rose-600">${o.orderId}</span>
+                <span class="text-[11px] text-gray-400 font-medium">(${o.date})</span>
+                ${renderStatusBadge(o.status)}
+              </div>
+              <div class="flex items-center gap-2">
+                <select onchange="updateStatus('${o.orderId}', this.value)" class="bg-gray-100 border border-gray-200 rounded-xl px-2.5 py-1 text-xs font-bold outline-none">
+                  <option value="pending" ${o.status === 'pending' ? 'selected' : ''}>🟡 កំពុងរង់ចាំ</option>
+                  <option value="confirmed" ${o.status === 'confirmed' ? 'selected' : ''}>🔵 បានបញ្ជាក់</option>
+                  <option value="shipped" ${o.status === 'shipped' ? 'selected' : ''}>🚚 កំពុងដឹក</option>
+                  <option value="completed" ${o.status === 'completed' ? 'selected' : ''}>🟢 បានបញ្ចប់</option>
+                  <option value="cancelled" ${o.status === 'cancelled' ? 'selected' : ''}>🔴 បានបោះបង់</option>
+                </select>
+                <button onclick="viewOrder('${o.orderId}')" class="bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs px-3 py-1 rounded-xl font-bold">
+                  🧾 មើលវិក្កយបត្រ
+                </button>
+              </div>
+            </div>
+
+            <!-- Customer & Delivery Info -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+              <div class="bg-rose-50/50 p-2.5 rounded-2xl border border-rose-100">
+                <div class="text-[10px] text-gray-400 font-bold uppercase">អ្នកទទួលទំនិញ</div>
+                <div class="font-bold text-gray-800">${o.customer.name}</div>
+                <a href="tel:${o.customer.phone}" class="text-rose-600 font-bold hover:underline flex items-center gap-1 mt-0.5">
+                  <span>📞</span> <span>${o.customer.phone}</span>
+                </a>
+              </div>
+              <div class="bg-rose-50/50 p-2.5 rounded-2xl border border-rose-100">
+                <div class="text-[10px] text-gray-400 font-bold uppercase">ទីតាំងដឹកជញ្ជូន</div>
+                <div class="font-medium text-gray-700 line-clamp-2">${o.customer.location}</div>
+                <div class="text-[10px] text-rose-600 font-bold mt-0.5">${o.deliveryType}</div>
+              </div>
+              <div class="bg-rose-50/50 p-2.5 rounded-2xl border border-rose-100">
+                <div class="text-[10px] text-gray-400 font-bold uppercase">ទូទាត់ប្រាក់ & សរុប</div>
+                <div class="text-sm font-black text-rose-600">$${o.grandTotalUSD.toFixed(2)} (${o.grandTotalKHR.toLocaleString()} ៛)</div>
+                <div class="text-[10px] text-gray-500 truncate">${o.paymentMethod}</div>
+              </div>
+            </div>
+
+            <!-- Products List with REAL PHOTOS -->
+            <div class="space-y-1.5 pt-1">
+              <div class="text-[10px] font-bold text-gray-500">ទំនិញដែលបានកុម្ម៉ង់ (${o.items.length} មុខ):</div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                ${itemsThumbs}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function updateStatus(orderId, newStatus) {
+      try {
+        const res = await fetch(`/api/orders/${orderId}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          showToast(`បានប្តូរស្ថានភាព Order ទៅជា ${newStatus} ✅`);
+          loadData();
+        }
+      } catch (err) {
+        showToast("⚠️ បរាជ័យក្នុងការប្តូរស្ថានភាព");
+      }
+    }
+
+    // View Order Modal & Print Invoice
+    function viewOrder(orderId) {
+      const order = state.orders.find(o => o.orderId === orderId);
+      if (!order) return;
+      state.selectedOrder = order;
+
+      document.getElementById('modal-order-id').textContent = order.orderId;
+      document.getElementById('order-modal-content').innerHTML = `
+        <div id="printable-invoice" class="space-y-3">
+          <div class="text-center border-b pb-3">
+            <h2 class="text-base font-black text-gray-900">ស្រីល័ក្ខ គ្រឿងក្រអូប</h2>
+            <p class="text-[11px] text-gray-500">មានលក់គ្រឿងក្រអូបគ្រប់មុខតម្លៃសមរម្យ</p>
+            <p class="text-[11px] text-gray-500">ទំនាក់ទំនង: 096 236 4475</p>
+            <div class="mt-2 text-xs font-mono font-bold text-rose-600">វិក្កយបត្រ / INVOICE: ${order.orderId}</div>
+            <div class="text-[10px] text-gray-400">កាលបរិច្ឆេទ: ${order.date}</div>
+          </div>
+
+          <div class="bg-gray-50 p-2.5 rounded-xl space-y-1">
+            <div><b>អតិថិជន:</b> ${order.customer.name}</div>
+            <div><b>ទូរស័ព្ទ:</b> ${order.customer.phone}</div>
+            <div><b>អាសយដ្ឋានដឹក:</b> ${order.customer.location} (${order.deliveryType})</div>
+            ${order.customer.notes ? `<div><b>ចំណាំ:</b> ${order.customer.notes}</div>` : ''}
+          </div>
+
+          <div>
+            <div class="font-bold text-gray-700 mb-1.5">បញ្ជីមុខទំនិញ:</div>
+            <div class="space-y-2">
+              ${order.items.map((it, idx) => `
+                <div class="flex items-center justify-between p-2 border rounded-xl">
+                  <div class="flex items-center gap-2">
+                    ${it.image ? `<img src="${it.image}" class="w-10 h-10 object-cover rounded-lg" />` : ''}
+                    <div>
+                      <div class="font-bold text-gray-800">${idx + 1}. ${it.name}</div>
+                      <div class="text-[10px] text-gray-500">${it.qty} x $${it.priceUSD.toFixed(2)}</div>
+                    </div>
+                  </div>
+                  <div class="font-bold text-rose-600">$${it.totalUSD.toFixed(2)}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="border-t pt-2 space-y-1 text-right">
+            <div>ថ្លៃដឹកជញ្ជូន: <b>$${order.deliveryFeeUSD.toFixed(2)}</b></div>
+            <div class="text-sm font-black text-rose-600">សរុបទឹកប្រាក់: $${order.grandTotalUSD.toFixed(2)} (${order.grandTotalKHR.toLocaleString()} ៛)</div>
+            <div class="text-[10px] text-gray-500">វិធីទូទាត់: ${order.paymentMethod}</div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('order-modal').classList.remove('hidden');
+    }
+
+    function closeOrderModal() {
+      document.getElementById('order-modal').classList.add('hidden');
+    }
+
+    function printOrderInvoice() {
+      const content = document.getElementById('printable-invoice').innerHTML;
+      const win = window.open('', '', 'width=600,height=700');
+      win.document.write(`
+        <html>
+          <head>
+            <title>Invoice - ${state.selectedOrder?.orderId}</title>
+            <style>
+              body { font-family: sans-serif; padding: 20px; font-size: 13px; line-height: 1.5; }
+              .text-center { text-align: center; }
+              .text-right { text-align: right; }
+              .font-bold { font-weight: bold; }
+              .border { border: 1px solid #ddd; padding: 8px; margin: 4px 0; border-radius: 6px; }
+              img { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; }
+            </style>
+          </head>
+          <body>${content}</body>
+        </html>
+      `);
+      win.document.close();
+      win.focus();
+      setTimeout(() => { win.print(); win.close(); }, 300);
+    }
+
+    // Render Products
     function filterAdminCat(cat) {
-      currentFilter = cat;
+      state.currentFilter = cat;
       document.querySelectorAll('.cat-pill').forEach(btn => {
         btn.classList.remove('active', 'border-rose-600', 'bg-rose-50', 'text-rose-600', 'font-bold');
         btn.classList.add('border-gray-200', 'bg-white', 'text-gray-600');
       });
       event.target.classList.add('active', 'border-rose-600', 'bg-rose-50', 'text-rose-600', 'font-bold');
       event.target.classList.remove('border-gray-200', 'bg-white', 'text-gray-600');
-      renderAdminProducts();
+      renderProducts();
     }
 
-    // Render Admin Products List
-    function renderAdminProducts() {
+    function renderProducts() {
       const container = document.getElementById('admin-products-list');
       const q = (document.getElementById('admin-search')?.value || '').toLowerCase().trim();
 
-      let list = adminProducts;
-      if (currentFilter !== 'all') {
-        list = list.filter(p => p.category === currentFilter);
+      let list = state.products;
+      if (state.currentFilter !== 'all') {
+        list = list.filter(p => p.category === state.currentFilter);
       }
       if (q) {
         list = list.filter(p => p.name.toLowerCase().includes(q));
       }
 
-      document.getElementById('product-count-badge').textContent = adminProducts.length;
+      document.getElementById('product-count-badge').textContent = state.products.length;
 
       if (list.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-full py-12 text-center text-gray-400">
-            <div class="text-3xl mb-2">🔍</div>
-            <p class="text-xs font-semibold">រកមិនឃើញទំនិញទេ</p>
-          </div>
-        `;
+        container.innerHTML = `<div class="col-span-full py-12 text-center text-gray-400">រកមិនឃើញទំនិញទេ</div>`;
         return;
       }
 
@@ -473,28 +937,24 @@
             </div>
           </div>
           <div class="flex flex-col gap-1">
-            <button onclick="editProduct('${p.id}')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs px-2.5 py-1 rounded-lg font-bold">
-              ✏️
-            </button>
-            <button onclick="deleteProduct('${p.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 text-xs px-2.5 py-1 rounded-lg font-bold">
-              🗑️
-            </button>
+            <button onclick="editProduct('${p.id}')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs px-2.5 py-1 rounded-lg font-bold">✏️</button>
+            <button onclick="deleteProduct('${p.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 text-xs px-2.5 py-1 rounded-lg font-bold">🗑️</button>
           </div>
         </div>
       `).join('');
     }
 
-    // Add / Edit Modal
     function openAddModal() {
       document.getElementById('modal-title').textContent = "➕ បន្ថែមទំនិញថ្មី";
       document.getElementById('product-form').reset();
       document.getElementById('prod-id').value = "";
       document.getElementById('prod-instock').checked = true;
+      document.getElementById('image-preview').classList.add('hidden');
       document.getElementById('product-modal').classList.remove('hidden');
     }
 
     function editProduct(id) {
-      const p = adminProducts.find(item => item.id === id);
+      const p = state.products.find(item => item.id === id);
       if (!p) return;
       document.getElementById('modal-title').textContent = "✏️ កែសម្រួលទំនិញ";
       document.getElementById('prod-id').value = p.id;
@@ -509,6 +969,10 @@
       document.getElementById('prod-benefits').value = (p.benefits || []).join(', ');
       document.getElementById('prod-instock').checked = p.inStock !== false;
 
+      const preview = document.getElementById('image-preview');
+      preview.src = p.image;
+      preview.classList.remove('hidden');
+
       document.getElementById('product-modal').classList.remove('hidden');
     }
 
@@ -516,12 +980,7 @@
       document.getElementById('product-modal').classList.add('hidden');
     }
 
-    function setPresetImg(url) {
-      document.getElementById('prod-image').value = url;
-    }
-
-    // Save Product
-    function saveProduct(e) {
+    async function saveProduct(e) {
       e.preventDefault();
       const id = document.getElementById('prod-id').value || ('item-' + Date.now());
       const name = document.getElementById('prod-name').value.trim();
@@ -536,161 +995,230 @@
       const benefits = benefitsStr ? benefitsStr.split(',').map(s => s.trim()).filter(Boolean) : [];
       const inStock = document.getElementById('prod-instock').checked;
 
-      const catNames = {
-        hair: "ថែរក្សាសក់",
-        face: "ថែរក្សាផ្ទៃមុខ",
-        skin: "ថែរក្សាស្បែក",
-        body: "ថែរក្សាដងខ្លួន"
-      };
+      const catNames = { hair: "ថែរក្សាសក់", face: "ថែរក្សាផ្ទៃមុខ", skin: "ថែរក្សាស្បែក", body: "ថែរក្សាដងខ្លួន" };
 
-      const newProd = {
-        id,
-        name,
-        category,
-        categoryName: catNames[category] || category,
-        priceUSD,
-        priceKHR: priceUSD * 4000,
-        oldPriceUSD,
-        image,
-        badge,
-        rating: 5.0,
-        reviews: 50,
-        size,
-        inStock,
-        description,
+      const payload = {
+        id, name, category, categoryName: catNames[category] || category,
+        priceUSD, priceKHR: priceUSD * 4000, oldPriceUSD, image, badge,
+        rating: 5.0, reviews: 50, size, inStock, description,
         benefits: benefits.length ? benefits : ["ផលិតផលសុទ្ធ ១០០%", "គុណភាពល្អ តម្លៃសមរម្យ"],
         usage: "ប្រើប្រាស់ជារៀងរាល់ថ្ងៃតាមតម្រូវការ។"
       };
 
-      const existingIndex = adminProducts.findIndex(p => p.id === id);
-      if (existingIndex > -1) {
-        adminProducts[existingIndex] = { ...adminProducts[existingIndex], ...newProd };
-        showToast("បានកែសម្រួលទំនិញជោគជ័យ! ✅");
-      } else {
-        adminProducts.unshift(newProd);
-        showToast("បានបន្ថែមទំនិញថ្មីជោគជ័យ! 🎉");
-      }
-
-      saveLocal();
-      renderAdminProducts();
-      closeProductModal();
-    }
-
-    // Delete Product
-    function deleteProduct(id) {
-      if (confirm("តើអ្នកពិតជាចង់លុបទំនិញនេះមែនទេ?")) {
-        adminProducts = adminProducts.filter(p => p.id !== id);
-        saveLocal();
-        renderAdminProducts();
-        showToast("បានលុបទំនិញរួចរាល់! 🗑️");
-      }
-    }
-
-    // Save to LocalStorage & Auto-sync to local PC file if on localhost
-    function saveLocal() {
-      localStorage.setItem('sreyleak_custom_products', JSON.stringify(adminProducts));
-      localStorage.setItem('sreyleak_custom_config', JSON.stringify(adminConfig));
-      
-      const isLocalPC = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      if (isLocalPC) {
-        saveDirectToFile(true);
-      }
-    }
-
-    // Config UI
-    function loadConfigUI() {
-      document.getElementById('cfg-shop-name').value = adminConfig.shopName || "";
-      document.getElementById('cfg-slogan').value = adminConfig.slogan || "";
-      document.getElementById('cfg-phone').value = adminConfig.phone || "";
-      document.getElementById('cfg-tg-link').value = adminConfig.telegramDirectLink || "";
-      document.getElementById('cfg-fee-pp').value = adminConfig.deliveryFees?.phnompenh || 1.5;
-      document.getElementById('cfg-fee-province').value = adminConfig.deliveryFees?.province || 2.5;
-      document.getElementById('cfg-aba-link').value = adminConfig.abaPayLink || "https://link.payway.com.kh/ABAPAYRz567848B";
-      document.getElementById('cfg-bakong-name').value = adminConfig.bakongQR?.merchantName || "";
-    }
-
-    function saveStoreSettings() {
-      adminConfig.shopName = document.getElementById('cfg-shop-name').value.trim();
-      adminConfig.slogan = document.getElementById('cfg-slogan').value.trim();
-      adminConfig.phone = document.getElementById('cfg-phone').value.trim();
-      adminConfig.telegramDirectLink = document.getElementById('cfg-tg-link').value.trim();
-      adminConfig.abaPayLink = document.getElementById('cfg-aba-link').value.trim() || "https://link.payway.com.kh/ABAPAYRz567848B";
-      adminConfig.deliveryFees = {
-        phnompenh: parseFloat(document.getElementById('cfg-fee-pp').value) || 1.5,
-        province: parseFloat(document.getElementById('cfg-fee-province').value) || 2.5
-      };
-      adminConfig.bakongQR = {
-        merchantName: document.getElementById('cfg-bakong-name').value.trim() || "SREYLEAK COSMETICS",
-        accountNumber: adminConfig.phone,
-        bank: "ABA PayWay / Bakong / Wing"
-      };
-
-      saveLocal();
-      showToast("បានរក្សាទុកការកំណត់ហាងជោគជ័យ! ✅");
-    }
-
-    // Generate products.js File Content
-    function generateJsFileContent() {
-      return `// បញ្ជីទំនិញគ្រឿងក្រអូបហាង ស្រីល័ក្ខ (Sreyleak Beauty Store)
-// កែសម្រួលចុងក្រោយ៖ ${new Date().toLocaleString('km-KH')}
-
-const PRODUCTS = ${JSON.stringify(adminProducts, null, 2)};
-
-const STORE_CONFIG = ${JSON.stringify(adminConfig, null, 2)};
-
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { PRODUCTS, STORE_CONFIG };
-}
-`;
-    }
-
-    // Copy to Clipboard
-    function copyGeneratedCode() {
-      const code = generateJsFileContent();
-      navigator.clipboard.writeText(code).then(() => {
-        showToast("បានចម្លងកូដ JS រួចរាល់! 📋");
-      });
-    }
-
-    // Download File
-    function downloadProductsFile() {
-      const code = generateJsFileContent();
-      const blob = new Blob([code], { type: 'application/javascript;charset=utf-8' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'products.js';
-      a.click();
-      showToast("កំពុងទាញយក products.js... 📥");
-    }
-
-    // Direct Save to File via Server API
-    async function saveDirectToFile() {
       try {
-        const res = await fetch('/api/save-products', {
+        const res = await fetch('/api/products', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            products: adminProducts,
-            config: adminConfig
-          })
+          body: JSON.stringify(payload)
         });
         const data = await res.json();
         if (data.ok) {
-          showToast("បាន Save ចូល js/products.js ជោគជ័យ! ⚡");
-        } else {
-          showToast("⚠️ មិនអាច Save បានទេ៖ " + (data.error || ""));
+          showToast("បានរក្សាទុកទំនិញក្នុង PC Database ជោគជ័យ! ✅");
+          closeProductModal();
+          loadData();
         }
       } catch (err) {
-        alert("មុខងារ Auto Save ដំណើរការនៅពេលលោកអ្នក run 'node server.js' ឬ 'start_shop.bat' នៅលើកុំព្យូទ័រ!\n\nប្រសិនបើនៅលើ GitHub Pages សូមប្រើប៊ូតុង 'ចម្លងកូដ JS' ឬ 'ទាញយក'");
+        showToast("⚠️ បរាជ័យក្នុងការ Save");
       }
     }
 
-    // Search input listener
-    document.getElementById('admin-search')?.addEventListener('input', renderAdminProducts);
+    async function deleteProduct(id) {
+      if (confirm("តើអ្នកពិតជាចង់លុបទំនិញនេះមែនទេ?")) {
+        try {
+          const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+          const data = await res.json();
+          if (data.ok) {
+            showToast("បានលុបទំនិញរួចរាល់! 🗑️");
+            loadData();
+          }
+        } catch (err) {
+          showToast("⚠️ បរាជ័យក្នុងការលុប");
+        }
+      }
+    }
 
-    // Initial Load
-    document.addEventListener('DOMContentLoaded', initData);
+    // Live Customer Chats Logic
+    function renderChatsList() {
+      const container = document.getElementById('chats-users-list');
+      const chatKeys = Object.keys(state.chats);
+      document.getElementById('total-chats-count').textContent = chatKeys.length;
+
+      let unreadTotal = 0;
+      chatKeys.forEach(k => { unreadTotal += (state.chats[k].unreadCount || 0); });
+      const badge = document.getElementById('chats-unread-badge');
+      if (unreadTotal > 0) {
+        badge.textContent = unreadTotal;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+
+      if (chatKeys.length === 0) {
+        container.innerHTML = `<div class="p-6 text-center text-gray-400 text-xs">មិនទាន់មានអតិថិជនឆាតនៅឡើយទេ</div>`;
+        return;
+      }
+
+      container.innerHTML = chatKeys.map(key => {
+        const chat = state.chats[key];
+        const isActive = state.activeChatId === key;
+        const timeStr = new Date(chat.lastMessageTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        return `
+          <div onclick="selectChat('${key}')" class="p-3 cursor-pointer transition flex items-center justify-between ${isActive ? 'bg-rose-50 border-l-4 border-rose-600' : 'hover:bg-gray-50'}">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-9 h-9 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center font-bold text-xs flex-shrink-0">
+                ${chat.user.firstName ? chat.user.firstName[0] : 'U'}
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="text-xs font-bold text-gray-900 truncate">
+                  ${chat.user.firstName} ${chat.user.lastName || ''}
+                  ${chat.user.username ? `<span class="text-[10px] text-gray-400 font-normal">(@${chat.user.username})</span>` : ''}
+                </div>
+                <div class="text-[11px] text-gray-500 truncate mt-0.5">${chat.lastMessage || ''}</div>
+              </div>
+            </div>
+            <div class="text-right flex-shrink-0 ml-2">
+              <div class="text-[10px] text-gray-400">${timeStr}</div>
+              ${chat.unreadCount ? `<span class="bg-rose-600 text-white text-[9px] font-black px-1.5 py-0.2 rounded-full mt-1 inline-block">${chat.unreadCount}</span>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function selectChat(chatId) {
+      state.activeChatId = chatId;
+      renderChatsList();
+
+      try {
+        const res = await fetch(`/api/chats/${chatId}`);
+        const data = await res.json();
+        if (data.ok && data.chat) {
+          const chat = data.chat;
+          document.getElementById('active-chat-name').textContent = `${chat.user.firstName} ${chat.user.lastName || ''}`;
+          document.getElementById('active-chat-info').textContent = `Telegram ID: ${chat.chatId} ${chat.user.username ? `• @${chat.user.username}` : ''}`;
+          
+          const tgLinkBtn = document.getElementById('btn-tg-chat-link');
+          tgLinkBtn.href = chat.user.username ? `https://t.me/${chat.user.username}` : `tg://user?id=${chat.chatId}`;
+          document.getElementById('active-chat-actions').classList.remove('hidden');
+          document.getElementById('chat-reply-container').classList.remove('hidden');
+
+          // Render Messages Thread
+          const msgContainer = document.getElementById('active-chat-messages');
+          if (!chat.messages || chat.messages.length === 0) {
+            msgContainer.innerHTML = `<div class="p-8 text-center text-gray-400 text-xs">មិនទាន់មានសារនៅឡើយទេ</div>`;
+          } else {
+            msgContainer.innerHTML = chat.messages.map(m => {
+              const isAdmin = m.sender === 'admin';
+              const time = new Date(m.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+              return `
+                <div class="flex flex-col ${isAdmin ? 'items-end' : 'items-start'}">
+                  <div class="max-w-[75%] p-3 rounded-2xl text-xs leading-relaxed ${isAdmin ? 'bg-rose-600 text-white rounded-br-none shadow-sm' : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-sm'}">
+                    ${m.text}
+                  </div>
+                  <div class="text-[9px] text-gray-400 mt-1 px-1">${time} ${isAdmin ? '• បានផ្ញើពី Admin' : ''}</div>
+                </div>
+              `;
+            }).join('');
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+          }
+        }
+      } catch (err) {
+        console.error("Select chat error:", err);
+      }
+    }
+
+    async function sendCustomerReply(e) {
+      e.preventDefault();
+      if (!state.activeChatId) return;
+
+      const input = document.getElementById('chat-reply-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      try {
+        const res = await fetch(`/api/chats/${state.activeChatId}/reply`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          input.value = '';
+          showToast("បានផ្ញើសារទៅកាន់ Telegram អតិថិជនរួចរាល់! ✉️");
+          selectChat(state.activeChatId);
+        } else {
+          showToast("⚠️ បរាជ័យក្នុងការផ្ញើ");
+        }
+      } catch (err) {
+        showToast("⚠️ បរាជ័យក្នុងការផ្ញើសារ");
+      }
+    }
+
+    // Settings UI
+    function loadSettingsUI() {
+      const cfg = state.settings;
+      document.getElementById('cfg-shop-name').value = cfg.shopName || "";
+      document.getElementById('cfg-slogan').value = cfg.slogan || "";
+      document.getElementById('cfg-phone').value = cfg.phone || "";
+      document.getElementById('cfg-tg-link').value = cfg.telegramDirectLink || "";
+      document.getElementById('cfg-fee-pp').value = cfg.deliveryFees?.phnompenh || 1.5;
+      document.getElementById('cfg-fee-province').value = cfg.deliveryFees?.province || 2.5;
+      document.getElementById('cfg-aba-link').value = cfg.abaPayLink || "https://link.payway.com.kh/ABAPAYRz567848B";
+      document.getElementById('cfg-bakong-name').value = cfg.bakongQR?.merchantName || "";
+    }
+
+    async function saveStoreSettings() {
+      const payload = {
+        shopName: document.getElementById('cfg-shop-name').value.trim(),
+        slogan: document.getElementById('cfg-slogan').value.trim(),
+        phone: document.getElementById('cfg-phone').value.trim(),
+        telegramDirectLink: document.getElementById('cfg-tg-link').value.trim(),
+        abaPayLink: document.getElementById('cfg-aba-link').value.trim() || "https://link.payway.com.kh/ABAPAYRz567848B",
+        deliveryFees: {
+          phnompenh: parseFloat(document.getElementById('cfg-fee-pp').value) || 1.5,
+          province: parseFloat(document.getElementById('cfg-fee-province').value) || 2.5
+        },
+        bakongQR: {
+          merchantName: document.getElementById('cfg-bakong-name').value.trim() || "SREYLEAK COSMETICS",
+          accountNumber: document.getElementById('cfg-phone').value.trim(),
+          bank: "ABA PayWay / Bakong / Wing"
+        }
+      };
+
+      try {
+        const res = await fetch('/api/settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.ok) {
+          showToast("បានរក្សាទុកការកំណត់ហាងជោគជ័យ! ✅");
+        }
+      } catch (err) {
+        showToast("⚠️ បរាជ័យក្នុងការ Save");
+      }
+    }
+
+    // Input Search Listeners
+    document.getElementById('admin-search')?.addEventListener('input', renderProducts);
+    document.getElementById('orders-search')?.addEventListener('input', renderOrders);
+    document.getElementById('prod-image')?.addEventListener('input', (e) => {
+      const preview = document.getElementById('image-preview');
+      if (e.target.value.trim()) {
+        preview.src = e.target.value.trim();
+        preview.classList.remove('hidden');
+      } else {
+        preview.classList.add('hidden');
+      }
+    });
+
+    // Auto-polling every 4 seconds to sync orders & chats in real-time
+    document.addEventListener('DOMContentLoaded', () => {
+      loadData();
+      setInterval(loadData, 4000);
+    });
   </script>
 </body>
 </html>
-

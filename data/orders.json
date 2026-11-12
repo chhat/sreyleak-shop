@@ -1,0 +1,40 @@
+[
+  {
+    "orderId": "SL-TEST-888",
+    "date": "12/11/2026, 12:03:39 PM",
+    "customer": {
+      "name": "សុខ វិសាល (តេស្តកុម្ម៉ង់)",
+      "phone": "012345678",
+      "location": "ផ្ទះលេខ 12 ផ្លូវ 2004 រាជធានីភ្នំពេញ",
+      "notes": "សូមផ្ញើរូបភាពផលិតផលជាក់ស្តែង"
+    },
+    "deliveryType": "ភ្នំពេញ (Phnom Penh)",
+    "deliveryFeeUSD": 1.5,
+    "paymentMethod": "ABA PAY / KHQR (https://link.payway.com.kh/ABAPAYRz567848B)",
+    "abaPayLink": "https://link.payway.com.kh/ABAPAYRz567848B",
+    "items": [
+      {
+        "id": "hair-01",
+        "name": "សេរ៉ូមបណ្តុះសក់ & កាត់បន្ថយសក់ជ្រុះ Ginseng Hair Serum",
+        "size": "50 ml",
+        "qty": 1,
+        "priceUSD": 12,
+        "priceKHR": 48000,
+        "totalUSD": 12,
+        "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600"
+      }
+    ],
+    "subtotalUSD": 12,
+    "grandTotalUSD": 13.5,
+    "grandTotalKHR": 54000,
+    "status": "pending",
+    "createdAt": "2026-11-12T05:03:39.292Z",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "time": "2026-11-12T05:03:39.292Z",
+        "note": "បានកុម្ម៉ង់ថ្មី"
+      }
+    ]
+  }
+]

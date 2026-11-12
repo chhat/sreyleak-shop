@@ -1,0 +1,21 @@
+{
+  "shopName": "ស្រីល័ក្ខ គ្រឿងក្រអូប",
+  "slogan": "មានលក់គ្រឿងក្រអូបគ្រប់មុខតម្លៃសមរម្យ គុណភាពល្អ",
+  "phone": "0962364475",
+  "phoneDisplay": "096 236 4475",
+  "telegramUsername": "sreyleak_cosmetics",
+  "telegramDirectLink": "https://t.me/+855962364475",
+  "callLink": "tel:0962364475",
+  "currencySymbol": "$",
+  "exchangeRateKHR": 4000,
+  "deliveryFees": {
+    "phnompenh": 1.5,
+    "province": 2.5
+  },
+  "abaPayLink": "https://link.payway.com.kh/ABAPAYRz567848B",
+  "bakongQR": {
+    "merchantName": "SREYLEAK COSMETICS",
+    "accountNumber": "0962364475",
+    "bank": "ABA PayWay / Bakong / Wing"
+  }
+}
