@@ -113,7 +113,16 @@ async function handleWebAppData(chatId, rawData, user) {
       `🙏 <i>ខាងហាង ស្រីល័ក្ខ នឹងទាក់ទងរៀបចំដឹកជញ្ជូនជូនលោកអ្នកឆាប់ៗនេះ!</i>\n` +
       `📞 ទំនាក់ទំនងសាកសួរ: <b>096 236 4475</b>`;
 
-    await sendMessage(chatId, customerReceipt);
+    const customerButtons = [];
+    if (order.abaPayLink) {
+      customerButtons.push([{ text: "📲 ចុចបង់ប្រាក់តាម ABA PAY", url: order.abaPayLink }]);
+    }
+    customerButtons.push([
+      { text: "📞 តេទៅអ្នកលក់: 096 236 4475", url: "tel:0962364475" },
+      { text: "💬 ឆាតសាកសួរ", url: "https://t.me/+855962364475" }
+    ]);
+
+    await sendMessage(chatId, customerReceipt, { reply_markup: { inline_keyboard: customerButtons } });
 
     // ប្រសិនបើមានដាក់ ADMIN_CHAT_ID នោះវានឹងផ្ញើដំណឹងទៅកាន់ Telegram ម្ចាស់ហាងភ្លាមៗ
     if (ADMIN_CHAT_ID) {

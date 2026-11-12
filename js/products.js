@@ -384,10 +384,11 @@ const STORE_CONFIG = {
     phnompenh: 1.50,
     province: 2.50
   },
+  abaPayLink: "https://link.payway.com.kh/ABAPAYRz567848B",
   bakongQR: {
     merchantName: "SREYLEAK COSMETICS",
     accountNumber: "0962364475",
-    bank: "Bakong / ABA / Wing"
+    bank: "ABA PayWay / Bakong / Wing"
   }
 };
 

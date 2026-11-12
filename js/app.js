@@ -526,7 +526,10 @@ function submitOrder(e) {
     customer: { name, phone, location, notes },
     deliveryType: state.deliveryType === 'phnompenh' ? 'ភ្នំពេញ (Phnom Penh)' : 'តាមបណ្តាខេត្ត (Provinces)',
     deliveryFeeUSD: deliveryFee,
-    paymentMethod: state.paymentMethod === 'cod' ? 'ទូទាត់ពេលទទួលទំនិញ (Cash on Delivery)' : 'ស្កេនទូទាត់ KHQR (Scan QR)',
+    paymentMethod: state.paymentMethod === 'cod' 
+      ? 'ទូទាត់ពេលទទួលទំនិញ (Cash on Delivery)' 
+      : 'ABA PAY / KHQR (https://link.payway.com.kh/ABAPAYRz567848B)',
+    abaPayLink: state.paymentMethod === 'khqr' ? (cfg.abaPayLink || 'https://link.payway.com.kh/ABAPAYRz567848B') : null,
     items: state.cart.map(i => ({
       name: i.product.name,
       qty: i.qty,
@@ -585,7 +588,7 @@ ${itemsText}
 🚚 ថ្លៃដឹកជញ្ជូន: $${order.deliveryFeeUSD.toFixed(2)}
 💵 សរុបទឹកប្រាក់: $${order.grandTotalUSD.toFixed(2)} (${order.grandTotalKHR.toLocaleString()} ៛)
 💳 វិធីទូទាត់: ${order.paymentMethod}
------------------------------------
+${order.abaPayLink ? `📲 Link បង់ប្រាក់ ABA PAY: ${order.abaPayLink}\n` : ''}-----------------------------------
 សូមអរគុណដែលបានជឿទុកចិត្តលើ ស្រីល័ក្ខ គ្រឿងក្រអូប! ✨
 📞 ទំនាក់ទំនង: 0962364475`;
 }
@@ -595,6 +598,17 @@ function showOrderSuccessModal(order, orderText) {
   document.getElementById('success-order-id').textContent = order.orderId;
   document.getElementById('success-order-total').textContent = `${formatUSD(order.grandTotalUSD)} (${formatKHR(order.grandTotalKHR)})`;
   
+  // Show ABA Direct Pay Button if user selected ABA PAY / KHQR
+  const abaPayBtn = document.getElementById('btn-pay-aba-success');
+  if (abaPayBtn) {
+    if (order.abaPayLink) {
+      abaPayBtn.href = order.abaPayLink;
+      abaPayBtn.classList.remove('hidden');
+    } else {
+      abaPayBtn.classList.add('hidden');
+    }
+  }
+
   const encodedText = encodeURIComponent(orderText);
   
   const tgDirectBtn = document.getElementById('btn-send-tg');

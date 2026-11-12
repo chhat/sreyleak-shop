@@ -430,29 +430,51 @@
               </div>
             </label>
 
-            <!-- KHQR -->
+            <!-- ABA PAY & KHQR -->
             <label class="flex items-center gap-3 p-2.5 rounded-xl border border-rose-200 bg-rose-50/40 cursor-pointer">
               <input type="radio" name="payment" id="payment-khqr" value="khqr" class="accent-rose-600" />
               <div class="flex-1 text-xs">
-                <div class="font-bold text-gray-800">📲 ស្កេនទូទាត់ KHQR (Bakong / ABA / Wing)</div>
-                <div class="text-[10px] text-gray-500">ស្កេនទូទាត់រហ័សទាន់ចិត្ត</div>
+                <div class="font-bold text-gray-800 flex items-center gap-1.5">
+                  <span>📲 ស្កេន ឬចុចបង់តាម ABA PAY / KHQR</span>
+                  <span class="bg-[#004B6E] text-white text-[9px] font-black px-1.5 py-0.5 rounded">ABA PAY</span>
+                </div>
+                <div class="text-[10px] text-gray-500">ចុចបង់តាម ABA Mobile ផ្ទាល់ ឬស្កេន QR ងាយស្រួល & រហ័ស</div>
               </div>
             </label>
           </div>
 
-          <!-- KHQR Preview Box (Hidden by default) -->
-          <div id="khqr-preview" class="hidden mt-3 p-3 bg-rose-50 rounded-2xl border border-rose-200 text-center">
-            <div class="text-xs font-bold text-rose-700 mb-1">ស្កេនទូទាត់ KHQR ទៅកាន់ហាង</div>
-            <!-- Mock KHQR QR Image / SVG -->
-            <div class="w-36 h-36 mx-auto bg-white p-2 rounded-xl shadow-inner border border-rose-200 flex flex-col items-center justify-center">
-              <img 
-                src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=SREYLEAK-COSMETICS-0962364475" 
-                alt="Bakong KHQR" 
-                class="w-full h-full object-contain"
-              />
+          <!-- ABA PAY & KHQR Preview Box (Hidden by default) -->
+          <div id="khqr-preview" class="hidden mt-3 p-3 bg-gradient-to-b from-blue-50 to-rose-50 rounded-2xl border border-blue-200 text-center space-y-2.5">
+            <div class="flex items-center justify-between text-xs font-bold text-[#004B6E]">
+              <span>💳 គណនី ABA PAY ហាងស្រីល័ក្ខ</span>
+              <span class="bg-[#004B6E] text-white text-[10px] px-2 py-0.5 rounded-full font-bold">ABA PAY</span>
             </div>
-            <div class="text-[11px] font-bold text-gray-800 mt-1.5">SREYLEAK COSMETICS</div>
-            <div class="text-[10px] text-gray-500">Bakong / ABA / Wing: 096 236 4475</div>
+
+            <!-- 1-Tap ABA Mobile Button -->
+            <a 
+              id="aba-direct-pay-link" 
+              href="https://link.payway.com.kh/ABAPAYRz567848B" 
+              target="_blank" 
+              class="w-full bg-[#004B6E] hover:bg-[#003752] text-white py-2.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all active:scale-95"
+            >
+              <span>📲</span>
+              <span>ចុចបង់ប្រាក់តាម ABA Mobile ឥឡូវនេះ (Tap to Pay)</span>
+            </a>
+
+            <!-- QR Code for Scanning -->
+            <div class="pt-1">
+              <div class="text-[11px] text-gray-500 mb-1.5 font-medium">ឬស្កេន QR Code ខាងក្រោមដើម្បីបង់ប្រាក់៖</div>
+              <div class="w-40 h-40 mx-auto bg-white p-2 rounded-2xl shadow-sm border border-blue-200 flex flex-col items-center justify-center">
+                <img 
+                  id="aba-qr-img" 
+                  src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Flink.payway.com.kh%2FABAPAYRz567848B" 
+                  alt="ABA PAY QR" 
+                  class="w-full h-full object-contain"
+                />
+              </div>
+              <div class="text-[11px] font-bold text-[#004B6E] mt-2">SREYLEAK COSMETICS</div>
+              <div class="text-[10px] text-gray-500">ABA PayWay Link: link.payway.com.kh/ABAPAYRz567848B</div>
+            </div>
           </div>
         </div>
 
@@ -509,6 +531,17 @@
       </p>
 
       <div class="space-y-2">
+        <!-- ABA Direct Pay Button (shown if ABA / KHQR selected) -->
+        <a 
+          id="btn-pay-aba-success" 
+          href="https://link.payway.com.kh/ABAPAYRz567848B" 
+          target="_blank" 
+          class="hidden w-full bg-[#004B6E] hover:bg-[#003853] text-white py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow transition-all active:scale-95"
+        >
+          <span>💳</span>
+          <span>ចុចបង់ប្រាក់ឥឡូវនេះតាម ABA PAY</span>
+        </a>
+
         <!-- Send to Telegram -->
         <button 
           id="btn-send-tg" 
