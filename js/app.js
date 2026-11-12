@@ -635,3 +635,4 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCartUI();
   setupEventListeners();
 });
+

@@ -12,9 +12,9 @@ const fs = require('fs');
 const path = require('path');
 
 // អាន configuration ពី env ឬ default
-const BOT_TOKEN = process.env.BOT_TOKEN || "YOUR_BOT_TOKEN_HERE";
-const WEB_APP_URL = process.env.WEB_APP_URL || "https://your-domain.com"; // ផ្លាស់ប្តូរ link ហាងរបស់អ្នក
-const ADMIN_CHAT_ID = process.env.ADMIN_CHAT_ID || ""; // Telegram Chat ID របស់ម្ចាស់ហាង (ស្រីល័ក្ខ)
+const BOT_TOKEN = process.env.BOT_TOKEN || "9100764037:AAHZBS0LYrpjfqnOiYg-nIU9azgTcOvgqJE";
+const WEB_APP_URL = process.env.WEB_APP_URL || "https://chhat.github.io/sreyleak-shop/";
+const ADMIN_CHAT_ID = process.env.ADMIN_CHAT_ID || "";
 
 const API_BASE = `https://api.telegram.org/bot${BOT_TOKEN}`;
 
@@ -196,3 +196,4 @@ async function startPolling() {
 }
 
 startPolling();
+

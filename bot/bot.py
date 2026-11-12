@@ -14,8 +14,8 @@ import time
 import urllib.request
 import urllib.parse
 
-BOT_TOKEN = os.getenv("BOT_TOKEN", "YOUR_BOT_TOKEN_HERE")
-WEB_APP_URL = os.getenv("WEB_APP_URL", "https://your-domain.com")
+BOT_TOKEN = os.getenv("BOT_TOKEN", "9100764037:AAHZBS0LYrpjfqnOiYg-nIU9azgTcOvgqJE")
+WEB_APP_URL = os.getenv("WEB_APP_URL", "https://chhat.github.io/sreyleak-shop/")
 ADMIN_CHAT_ID = os.getenv("ADMIN_CHAT_ID", "")
 
 API_BASE = f"https://api.telegram.org/bot{BOT_TOKEN}"
@@ -132,3 +132,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
