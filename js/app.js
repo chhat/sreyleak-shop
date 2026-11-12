@@ -12,6 +12,29 @@ if (tg) {
   }
 }
 
+// App State Helpers: Support Dynamic Products & Config from Admin
+function getEffectiveProducts() {
+  const custom = localStorage.getItem('sreyleak_custom_products');
+  if (custom) {
+    try {
+      const parsed = JSON.parse(custom);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    } catch(e) {}
+  }
+  return typeof PRODUCTS !== 'undefined' ? PRODUCTS : [];
+}
+
+function getEffectiveConfig() {
+  const custom = localStorage.getItem('sreyleak_custom_config');
+  if (custom) {
+    try {
+      const parsed = JSON.parse(custom);
+      if (parsed && typeof parsed === 'object') return { ...STORE_CONFIG, ...parsed };
+    } catch(e) {}
+  }
+  return typeof STORE_CONFIG !== 'undefined' ? STORE_CONFIG : {};
+}
+
 // App State
 let state = {
   currentCategory: 'all',
@@ -29,9 +52,10 @@ function loadCart() {
     const saved = localStorage.getItem(CART_STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
+      const allProducts = getEffectiveProducts();
       // Map with actual product reference
       state.cart = parsed.map(item => {
-        const prod = PRODUCTS.find(p => p.id === item.id);
+        const prod = allProducts.find(p => p.id === item.id);
         return prod ? { product: prod, qty: item.qty } : null;
       }).filter(Boolean);
     }
@@ -111,7 +135,8 @@ function showToast(message, icon = '🛍️') {
 
 // Render Products
 function renderProducts() {
-  let list = PRODUCTS;
+  const currentCfg = getEffectiveConfig();
+  let list = getEffectiveProducts();
 
   // Category filter
   if (state.currentCategory !== 'all') {
@@ -207,7 +232,7 @@ function renderProducts() {
 
 // Add to Cart
 function addToCart(productId, qty = 1) {
-  const prod = PRODUCTS.find(p => p.id === productId);
+  const prod = getEffectiveProducts().find(p => p.id === productId);
   if (!prod) return;
 
   const existing = state.cart.find(item => item.product.id === productId);
@@ -225,9 +250,11 @@ function addToCart(productId, qty = 1) {
 
 // Update Cart UI
 function updateCartUI() {
+  const cfg = getEffectiveConfig();
+  const exchangeRate = cfg.exchangeRateKHR || 4000;
   const totalCount = state.cart.reduce((sum, item) => sum + item.qty, 0);
   const subtotalUSD = state.cart.reduce((sum, item) => sum + (item.product.priceUSD * item.qty), 0);
-  const subtotalKHR = subtotalUSD * STORE_CONFIG.exchangeRateKHR;
+  const subtotalKHR = subtotalUSD * exchangeRate;
 
   // Badges
   cartCountBadges.forEach(badge => {
@@ -265,7 +292,7 @@ function updateCartUI() {
           <h4 class="text-xs font-semibold text-gray-800 truncate">${item.product.name}</h4>
           <div class="text-[11px] text-gray-500 mt-0.5">${item.product.size}</div>
           <div class="text-xs font-bold text-rose-600 mt-1">
-            ${formatUSD(item.product.priceUSD)} <span class="text-[10px] text-gray-400 font-normal">(${formatKHR(item.product.priceKHR)})</span>
+            ${formatUSD(item.product.priceUSD)} <span class="text-[10px] text-gray-400 font-normal">(${formatKHR(item.product.priceKHR || (item.product.priceUSD * exchangeRate))})</span>
           </div>
         </div>
         <div class="flex items-center gap-2">
@@ -276,9 +303,10 @@ function updateCartUI() {
       </div>
     `).join('');
 
-    const deliveryFee = STORE_CONFIG.deliveryFees[state.deliveryType] || 0;
+    const deliveryFees = cfg.deliveryFees || { phnompenh: 1.5, province: 2.5 };
+    const deliveryFee = deliveryFees[state.deliveryType] || 0;
     const grandTotalUSD = subtotalUSD + deliveryFee;
-    const grandTotalKHR = grandTotalUSD * STORE_CONFIG.exchangeRateKHR;
+    const grandTotalKHR = grandTotalUSD * exchangeRate;
 
     cartSubtotalEl.textContent = formatUSD(subtotalUSD);
     cartDeliveryEl.textContent = formatUSD(deliveryFee);
@@ -337,7 +365,7 @@ function setDeliveryType(type) {
 
 // Product Detail Modal
 function openProductDetail(productId) {
-  const p = PRODUCTS.find(item => item.id === productId);
+  const p = getEffectiveProducts().find(item => item.id === productId);
   if (!p) return;
   state.selectedProduct = p;
   triggerHaptic('light');
@@ -416,10 +444,14 @@ function openCheckout() {
   closeCart();
   triggerHaptic('light');
 
+  const cfg = getEffectiveConfig();
+  const exchangeRate = cfg.exchangeRateKHR || 4000;
+  const deliveryFees = cfg.deliveryFees || { phnompenh: 1.5, province: 2.5 };
+
   const subtotalUSD = state.cart.reduce((sum, item) => sum + (item.product.priceUSD * item.qty), 0);
-  const deliveryFee = STORE_CONFIG.deliveryFees[state.deliveryType] || 0;
+  const deliveryFee = deliveryFees[state.deliveryType] || 0;
   const grandTotalUSD = subtotalUSD + deliveryFee;
-  const grandTotalKHR = grandTotalUSD * STORE_CONFIG.exchangeRateKHR;
+  const grandTotalKHR = grandTotalUSD * exchangeRate;
 
   document.getElementById('checkout-items-summary').innerHTML = state.cart.map(i => `
     <div class="flex justify-between text-xs py-1 border-b border-rose-50">
@@ -477,10 +509,14 @@ function submitOrder(e) {
     return;
   }
 
+  const cfg = getEffectiveConfig();
+  const exchangeRate = cfg.exchangeRateKHR || 4000;
+  const deliveryFees = cfg.deliveryFees || { phnompenh: 1.5, province: 2.5 };
+
   const subtotalUSD = state.cart.reduce((sum, item) => sum + (item.product.priceUSD * item.qty), 0);
-  const deliveryFee = STORE_CONFIG.deliveryFees[state.deliveryType] || 0;
+  const deliveryFee = deliveryFees[state.deliveryType] || 0;
   const grandTotalUSD = subtotalUSD + deliveryFee;
-  const grandTotalKHR = grandTotalUSD * STORE_CONFIG.exchangeRateKHR;
+  const grandTotalKHR = grandTotalUSD * exchangeRate;
   const orderId = 'SL-' + Math.floor(100000 + Math.random() * 900000);
   const dateStr = new Date().toLocaleString('km-KH');
 

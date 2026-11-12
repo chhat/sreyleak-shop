@@ -44,6 +44,8 @@ async function sendMessage(chatId, text, extra = {}) {
 
 // ឆ្លើយតបសារ /start
 async function handleStart(chatId, firstName) {
+  const isAdmin = String(chatId) === String(ADMIN_CHAT_ID);
+
   const welcomeText = `🌸 <b>សូមស្វាគមន៍មកកាន់ ហាង ស្រីល័ក្ខ គ្រឿងក្រអូប!</b> 🌸\n` +
     `<i>"មានលក់គ្រឿងក្រអូបគ្រប់មុខតម្លៃសមរម្យ គុណភាពល្អ"</i>\n\n` +
     `ជំរាបសួរ <b>${firstName || 'អតិថិជន'}</b>! ហាងយើងខ្ញុំមានលក់ផលិតផលថែរក្សាសម្រស់៖\n` +
@@ -55,21 +57,31 @@ async function handleStart(chatId, firstName) {
     `📞 ទំនាក់ទំនង: <b>096 236 4475</b>\n\n` +
     `👇 <b>សូមចុចប៊ូតុងខាងក្រោមដើម្បីចូលមើលទំនិញ និងកុម្ម៉ង់ភ្លាមៗ៖</b>`;
 
-  const keyboard = {
-    inline_keyboard: [
-      [
-        {
-          text: "🛒 បើកហាងទំនិញ (Open Shop)",
-          web_app: { url: WEB_APP_URL }
-        }
-      ],
-      [
-        { text: "📞 តេផ្ទាល់: 096 236 4475", url: "https://t.me/+855962364475" },
-        { text: "💬 ឆាតទៅអ្នកលក់", url: "https://t.me/+855962364475" }
-      ]
+  const inlineButtons = [
+    [
+      {
+        text: "🛒 បើកហាងទំនិញ (Open Shop)",
+        web_app: { url: WEB_APP_URL }
+      }
+    ],
+    [
+      { text: "📞 តេផ្ទាល់: 096 236 4475", url: "https://t.me/+855962364475" },
+      { text: "💬 ឆាតទៅអ្នកលក់", url: "https://t.me/+855962364475" }
     ]
-  };
+  ];
 
+  // បើជា Admin បន្ថែមប៊ូតុង Admin Panel
+  if (isAdmin) {
+    const adminUrl = WEB_APP_URL.endsWith('/') ? `${WEB_APP_URL}admin.html` : `${WEB_APP_URL}/admin.html`;
+    inlineButtons.push([
+      {
+        text: "⚙️ ផ្ទាំងគ្រប់គ្រងទំនិញ (Admin Dashboard)",
+        web_app: { url: adminUrl }
+      }
+    ]);
+  }
+
+  const keyboard = { inline_keyboard: inlineButtons };
   await sendMessage(chatId, welcomeText, { reply_markup: keyboard });
 }
 
@@ -178,6 +190,15 @@ async function startPolling() {
             await handleWebAppData(chatId, msg.web_app_data.data, msg.from);
           } else if (text.startsWith('/start')) {
             await handleStart(chatId, msg.from?.first_name);
+          } else if (text.startsWith('/admin')) {
+            const adminUrl = WEB_APP_URL.endsWith('/') ? `${WEB_APP_URL}admin.html` : `${WEB_APP_URL}/admin.html`;
+            await sendMessage(chatId, `⚙️ <b>ផ្ទាំងគ្រប់គ្រង Admin (ស្រីល័ក្ខ គ្រឿងក្រអូប)</b>\n\nសូមចុចប៊ូតុងខាងក្រោមដើម្បីចូលទៅកាន់ផ្ទាំងគ្រប់គ្រងទំនិញ និងការកំណត់ហាង៖\n🔑 កូដ PIN លំនាំដើម: <code>2364</code>`, {
+              reply_markup: {
+                inline_keyboard: [
+                  [{ text: "⚙️ បើក Admin Dashboard", web_app: { url: adminUrl } }]
+                ]
+              }
+            });
           } else if (text.startsWith('/contact') || text.startsWith('/help')) {
             await sendMessage(chatId, `🌸 <b>ហាង ស្រីល័ក្ខ គ្រឿងក្រអូប</b> 🌸\n` +
               `📞 ទូរស័ព្ទ: <b>096 236 4475</b>\n` +

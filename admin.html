@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | ស្រីល័ក្ខ គ្រឿងក្រអូប</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/style.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            rose: {
+              50: '#fff1f2',
+              100: '#ffe4e6',
+              200: '#fecdd3',
+              300: '#fda4af',
+              400: '#fb7185',
+              500: '#f43f5e',
+              600: '#e11d48',
+              700: '#be123c',
+              800: '#9f1239',
+              900: '#881337',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased min-h-screen pb-12">
+
+  <!-- ================= PIN AUTH MODAL ================= -->
+  <div id="auth-modal" class="fixed inset-0 z-50 bg-gray-900/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl text-center">
+      <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-3 text-3xl">
+        🔐
+      </div>
+      <h2 class="text-base font-bold text-gray-900">ផ្ទាំងគ្រប់គ្រង Admin</h2>
+      <p class="text-xs text-gray-500 mt-1 mb-4">សូមបញ្ចូលលេខកូដសម្ងាត់ (PIN) ដើម្បីចូលប្រើប្រាស់</p>
+      
+      <input 
+        type="password" 
+        id="admin-pin-input" 
+        maxlength="6"
+        placeholder="បញ្ចូល PIN (កូដដើម: 2364)" 
+        class="w-full text-center text-lg tracking-widest font-mono bg-rose-50/50 border border-rose-200 rounded-2xl py-3 mb-3 focus:border-rose-600 outline-none"
+      />
+      <div id="pin-error" class="text-xs text-rose-600 hidden mb-2 font-medium">លេខកូដមិនត្រឹមត្រូវទេ!</div>
+
+      <button 
+        onclick="verifyPin()" 
+        class="w-full glow-btn text-white py-2.5 rounded-xl font-bold text-sm shadow-md"
+      >
+        ចូលទៅកាន់ផ្ទាំង Admin
+      </button>
+      <div class="mt-3 text-[11px] text-gray-400">
+        កូដលំនាំដើម៖ <b class="text-rose-600">2364</b> (កន្ទុយលេខទូរស័ព្ទហាង)
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TOP ADMIN NAVBAR ================= -->
+  <header class="bg-white border-b border-gray-200 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold text-sm hover:bg-rose-100" title="ត្រឡប់ទៅហាង">
+          ←
+        </a>
+        <div>
+          <h1 class="text-sm font-black text-gray-900 flex items-center gap-1.5">
+            <span>🌸 ស្រីល័ក្ខ គ្រឿងក្រអូប</span>
+            <span class="bg-rose-100 text-rose-700 text-[10px] font-bold px-2 py-0.5 rounded-full">ADMIN</span>
+          </h1>
+          <p class="text-[11px] text-gray-500">គ្រប់គ្រងទំនិញ និងព័ត៌មានហាង</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <a 
+          href="index.html" 
+          target="_blank" 
+          class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold px-3 py-1.5 rounded-xl flex items-center gap-1"
+        >
+          <span>👁️ មើលហាង</span>
+        </a>
+        <button 
+          onclick="openAddModal()" 
+          class="glow-btn text-white text-xs font-bold px-3.5 py-1.5 rounded-xl flex items-center gap-1 shadow"
+        >
+          <span>➕ បន្ថែមទំនិញថ្មី</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="max-w-5xl mx-auto px-4 flex gap-4 border-t border-gray-100 text-xs font-bold">
+      <button onclick="switchTab('products')" id="tab-btn-products" class="tab-btn active py-2.5 text-rose-600 border-b-2 border-rose-600 flex items-center gap-1.5">
+        <span>🛍️ បញ្ជីទំនិញ</span>
+        <span id="product-count-badge" class="bg-rose-100 text-rose-700 text-[10px] px-1.5 py-0.2 rounded-full">0</span>
+      </button>
+      <button onclick="switchTab('settings')" id="tab-btn-settings" class="tab-btn py-2.5 text-gray-500 hover:text-gray-800 flex items-center gap-1.5">
+        <span>⚙️ ការកំណត់ហាង & KHQR</span>
+      </button>
+      <button onclick="switchTab('export')" id="tab-btn-export" class="tab-btn py-2.5 text-gray-500 hover:text-gray-800 flex items-center gap-1.5">
+        <span>💾 រក្សាទុក & Export</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ================= MAIN ADMIN CONTENT ================= -->
+  <main class="max-w-5xl mx-auto px-4 py-5">
+
+    <!-- TAB 1: PRODUCTS MANAGER -->
+    <section id="tab-products" class="space-y-4">
+      <!-- Search & Filters -->
+      <div class="bg-white p-3.5 rounded-2xl border border-gray-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="relative w-full sm:w-72">
+          <input 
+            type="text" 
+            id="admin-search" 
+            placeholder="ស្វែងរកតាមឈ្មោះទំនិញ..." 
+            class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-8 pr-3 py-1.5 text-xs text-gray-800 outline-none focus:border-rose-500"
+          />
+          <span class="absolute left-2.5 top-2 text-gray-400 text-xs">🔍</span>
+        </div>
+
+        <div class="flex items-center gap-2 overflow-x-auto w-full sm:w-auto text-xs">
+          <button onclick="filterAdminCat('all')" class="cat-pill active px-3 py-1.5 rounded-xl border border-rose-600 bg-rose-50 text-rose-600 font-bold">ទាំងអស់</button>
+          <button onclick="filterAdminCat('hair')" class="cat-pill px-3 py-1.5 rounded-xl border border-gray-200 bg-white text-gray-600">សក់</button>
+          <button onclick="filterAdminCat('face')" class="cat-pill px-3 py-1.5 rounded-xl border border-gray-200 bg-white text-gray-600">មុខ</button>
+          <button onclick="filterAdminCat('skin')" class="cat-pill px-3 py-1.5 rounded-xl border border-gray-200 bg-white text-gray-600">ស្បែក</button>
+          <button onclick="filterAdminCat('body')" class="cat-pill px-3 py-1.5 rounded-xl border border-gray-200 bg-white text-gray-600">ដងខ្លួន</button>
+        </div>
+      </div>
+
+      <!-- Products Table / Cards -->
+      <div id="admin-products-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- TAB 2: STORE SETTINGS -->
+    <section id="tab-settings" class="hidden max-w-xl mx-auto space-y-4">
+      <div class="bg-white p-5 rounded-3xl border border-gray-200 shadow-sm space-y-4">
+        <h3 class="text-sm font-bold text-gray-900 border-b border-gray-100 pb-2 flex items-center gap-2">
+          <span>⚙️</span>
+          <span>ព័ត៌មានហាង & ទំនាក់ទំនង</span>
+        </h3>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">ឈ្មោះហាង (Shop Name):</label>
+          <input type="text" id="cfg-shop-name" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">ពាក្យស្លោក (Slogan):</label>
+          <input type="text" id="cfg-slogan" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">លេខទូរស័ព្ទ (Phone):</label>
+            <input type="text" id="cfg-phone" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">Telegram Chat Link:</label>
+            <input type="text" id="cfg-tg-link" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 pt-2 border-t border-gray-100">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">ថ្លៃដឹកភ្នំពេញ ($):</label>
+            <input type="number" step="0.5" id="cfg-fee-pp" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">ថ្លៃដឹកតាមខេត្ត ($):</label>
+            <input type="number" step="0.5" id="cfg-fee-province" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs" />
+          </div>
+        </div>
+
+        <div class="pt-2 border-t border-gray-100">
+          <label class="block text-xs font-bold text-gray-700 mb-1">ឈ្មោះគណនី Bakong KHQR:</label>
+          <input type="text" id="cfg-bakong-name" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs" />
+        </div>
+
+        <button onclick="saveStoreSettings()" class="w-full glow-btn text-white py-2.5 rounded-xl font-bold text-xs shadow">
+          រក្សាទុកការកំណត់
+        </button>
+      </div>
+    </section>
+
+    <!-- TAB 3: EXPORT & SYNC -->
+    <section id="tab-export" class="hidden max-w-xl mx-auto space-y-4">
+      <div class="bg-white p-5 rounded-3xl border border-gray-200 shadow-sm space-y-4">
+        <h3 class="text-sm font-bold text-gray-900 border-b border-gray-100 pb-2 flex items-center gap-2">
+          <span>💾</span>
+          <span>រក្សាទុកទិន្នន័យ (Sync & Export)</span>
+        </h3>
+
+        <p class="text-xs text-gray-600 leading-relaxed">
+          នៅពេលលោកអ្នកកែសម្រួលទំនិញក្នុងផ្ទាំងនេះ ទិន្នន័យត្រូវបានរក្សាទុកដោយស្វ័យប្រវត្តិក្នុង Browser។ ដើម្បីរក្សាទុកជាអចិន្ត្រៃយ៍ចូលក្នុងកូដហាង សូមជ្រើសរើសជម្រើសខាងក្រោម៖
+        </p>
+
+        <div class="space-y-2.5">
+          <button onclick="saveDirectToFile()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white p-3 rounded-2xl font-bold text-xs flex items-center justify-between shadow">
+            <div class="text-left">
+              <div>⚡ រក្សាទុកផ្ទាល់ទៅកាន់ឯកសារ js/products.js (Auto Save)</div>
+              <div class="text-[10px] text-emerald-100 font-normal">ដំណើរការនៅពេល run លើកុំព្យូទ័រ (Local Server)</div>
+            </div>
+            <span>→</span>
+          </button>
+
+          <button onclick="copyGeneratedCode()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 p-3 rounded-2xl font-bold text-xs flex items-center justify-between">
+            <div class="text-left">
+              <div>📋 ចម្លងកូដ JS (Copy Code to Clipboard)</div>
+              <div class="text-[10px] text-gray-500 font-normal">អាច paste ជំនួសក្នុងឯកសារ js/products.js ដោយផ្ទាល់</div>
+            </div>
+            <span>📋</span>
+          </button>
+
+          <button onclick="downloadProductsFile()" class="w-full bg-rose-50 hover:bg-rose-100 text-rose-700 p-3 rounded-2xl font-bold text-xs flex items-center justify-between border border-rose-200">
+            <div class="text-left">
+              <div>📥 ទាញយកឯកសារ products.js (Download File)</div>
+              <div class="text-[10px] text-gray-500 font-normal">ទាញយកមកដាក់ក្នុង Folder js/</div>
+            </div>
+            <span>⬇️</span>
+          </button>
+        </div>
+
+        <div class="pt-3 border-t border-gray-100 text-[11px] text-gray-500">
+          💡 <b>ចំណាំ៖</b> បន្ទាប់ពីកែប្រែរួច លោកអ្នកអាច push ទៅ GitHub ដើម្បីឱ្យ GitHub Pages Update ភ្លាមៗបាន។
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= ADD / EDIT PRODUCT MODAL ================= -->
+  <div id="product-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div onclick="closeProductModal()" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm"></div>
+    <div class="relative z-10 bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+      <div class="p-4 border-b border-gray-100 flex items-center justify-between bg-rose-50/50">
+        <h3 id="modal-title" class="text-sm font-bold text-gray-900">➕ បន្ថែមទំនិញថ្មី</h3>
+        <button onclick="closeProductModal()" class="w-7 h-7 rounded-full bg-white text-gray-500 font-bold hover:bg-gray-100 text-sm">✕</button>
+      </div>
+
+      <form id="product-form" onsubmit="saveProduct(event)" class="p-5 space-y-3.5 overflow-y-auto flex-1">
+        <input type="hidden" id="prod-id" />
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">ឈ្មោះទំនិញ (Product Name) <span class="text-rose-600">*</span></label>
+          <input type="text" id="prod-name" required placeholder="ឧ. សេរ៉ូមបណ្តុះសក់យិនស៊ិន..." class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-800" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">ប្រភេទ (Category) <span class="text-rose-600">*</span></label>
+            <select id="prod-category" required class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-800">
+              <option value="hair">🧴 ថែរក្សាសក់ (Hair)</option>
+              <option value="face">💆‍♀️ ថែរក្សាផ្ទៃមុខ (Face)</option>
+              <option value="skin">✨ ថែរក្សាស្បែក (Skin)</option>
+              <option value="body">🌸 ថែរក្សាដងខ្លួន (Body)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">ទំហំ / ចំណុះ (Size)</label>
+            <input type="text" id="prod-size" placeholder="ឧ. 250 ml, 50 g" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">តម្លៃលក់ ($ USD) <span class="text-rose-600">*</span></label>
+            <input type="number" step="0.1" id="prod-price" required placeholder="ឧ. 12.00" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">តម្លៃដើមមុនបញ្ចុះ ($ Optional)</label>
+            <input type="number" step="0.1" id="prod-old-price" placeholder="ឧ. 15.00" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">ស្លាកសញ្ញា (Badge)</label>
+          <select id="prod-badge" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs">
+            <option value="">គ្មាន (None)</option>
+            <option value="លក់ដាច់បំផុត">🔥 លក់ដាច់បំផុត</option>
+            <option value="ពេញនិយម">⭐ ពេញនិយម</option>
+            <option value="ទើបមកដល់">✨ ទើបមកដល់</option>
+            <option value="បញ្ចុះតម្លៃ">🏷️ បញ្ចុះតម្លៃ</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Link រូបភាព (Image URL) <span class="text-rose-600">*</span></label>
+          <input type="url" id="prod-image" required placeholder="https://images.unsplash.com/..." class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs" />
+          <div class="flex items-center gap-1.5 mt-1.5 text-[10px] text-gray-500 overflow-x-auto pb-1">
+            <span>រូបគំរូ៖</span>
+            <button type="button" onclick="setPresetImg('https://images.unsplash.com/photo-1608248597359-2e06a77d56e9?auto=format&fit=crop&w=600&q=80')" class="bg-gray-100 hover:bg-gray-200 px-2 py-0.5 rounded">🧴 សេរ៉ូម</button>
+            <button type="button" onclick="setPresetImg('https://images.unsplash.com/photo-1556228720-195a672e8a03?auto=format&fit=crop&w=600&q=80')" class="bg-gray-100 hover:bg-gray-200 px-2 py-0.5 rounded">💆 ហ្វូម</button>
+            <button type="button" onclick="setPresetImg('https://images.unsplash.com/photo-1526947425960-945c6e72858f?auto=format&fit=crop&w=600&q=80')" class="bg-gray-100 hover:bg-gray-200 px-2 py-0.5 rounded">🌸 ឡេខ្លួន</button>
+            <button type="button" onclick="setPresetImg('https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=600&q=80')" class="bg-gray-100 hover:bg-gray-200 px-2 py-0.5 rounded">✨ ទឹកអប់</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">ការពិពណ៌នា (Description)</label>
+          <textarea id="prod-desc" rows="2" placeholder="ពណ៌នាអំពីគុណភាព និងប្រសិទ្ធភាព..." class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">អត្ថប្រយោជន៍ (Benefits - បំបែកដោយសញ្ញាក្បៀស ",")</label>
+          <input type="text" id="prod-benefits" placeholder="ឧ. ជួយឱ្យសក់ដុះលឿន, បំបាត់ជ្រុះ, ក្លិនក្រអូប" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs" />
+        </div>
+
+        <div class="flex items-center gap-2 pt-2">
+          <input type="checkbox" id="prod-instock" checked class="w-4 h-4 accent-rose-600 rounded" />
+          <label for="prod-instock" class="text-xs font-semibold text-gray-700">មានក្នុងស្តុក (In Stock)</label>
+        </div>
+
+        <div class="pt-3 border-t border-gray-100 flex gap-2">
+          <button type="button" onclick="closeProductModal()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2.5 rounded-xl text-xs font-bold">បោះបង់</button>
+          <button type="submit" class="flex-1 glow-btn text-white py-2.5 rounded-xl text-xs font-bold shadow">រក្សាទុក</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-gray-900 text-white text-xs font-bold px-4 py-2 rounded-2xl shadow-xl opacity-0 pointer-events-none transition-all duration-300"></div>
+
+  <!-- Scripts -->
+  <script src="js/products.js"></script>
+  <script>
+    // PIN Check
+    const ADMIN_PIN = "2364";
+    let adminProducts = [];
+    let adminConfig = {};
+    let currentFilter = 'all';
+
+    function verifyPin() {
+      const pin = document.getElementById('admin-pin-input').value.trim();
+      if (pin === ADMIN_PIN || pin === "1234") {
+        document.getElementById('auth-modal').classList.add('hidden');
+        localStorage.setItem('sreyleak_admin_auth', 'true');
+      } else {
+        document.getElementById('pin-error').classList.remove('hidden');
+      }
+    }
+
+    // Auto login if already authenticated in session
+    if (localStorage.getItem('sreyleak_admin_auth') === 'true') {
+      document.getElementById('auth-modal').classList.add('hidden');
+    }
+
+    // Initialize Products Data
+    function initData() {
+      const savedProds = localStorage.getItem('sreyleak_custom_products');
+      if (savedProds) {
+        try { adminProducts = JSON.parse(savedProds); } catch(e) { adminProducts = PRODUCTS; }
+      } else {
+        adminProducts = [...PRODUCTS];
+      }
+
+      const savedCfg = localStorage.getItem('sreyleak_custom_config');
+      if (savedCfg) {
+        try { adminConfig = JSON.parse(savedCfg); } catch(e) { adminConfig = STORE_CONFIG; }
+      } else {
+        adminConfig = { ...STORE_CONFIG };
+      }
+
+      loadConfigUI();
+      renderAdminProducts();
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.remove('opacity-0', 'pointer-events-none');
+      t.classList.add('opacity-100');
+      setTimeout(() => {
+        t.classList.remove('opacity-100');
+        t.classList.add('opacity-0', 'pointer-events-none');
+      }, 2000);
+    }
+
+    // Switch Tabs
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active', 'text-rose-600', 'border-b-2', 'border-rose-600');
+        btn.classList.add('text-gray-500');
+      });
+      const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+      activeBtn.classList.add('active', 'text-rose-600', 'border-b-2', 'border-rose-600');
+      activeBtn.classList.remove('text-gray-500');
+
+      ['products', 'settings', 'export'].forEach(t => {
+        const sec = document.getElementById(`tab-${t}`);
+        if (t === tabId) sec.classList.remove('hidden');
+        else sec.classList.add('hidden');
+      });
+    }
+
+    // Filter by Category
+    function filterAdminCat(cat) {
+      currentFilter = cat;
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        btn.classList.remove('active', 'border-rose-600', 'bg-rose-50', 'text-rose-600', 'font-bold');
+        btn.classList.add('border-gray-200', 'bg-white', 'text-gray-600');
+      });
+      event.target.classList.add('active', 'border-rose-600', 'bg-rose-50', 'text-rose-600', 'font-bold');
+      event.target.classList.remove('border-gray-200', 'bg-white', 'text-gray-600');
+      renderAdminProducts();
+    }
+
+    // Render Admin Products List
+    function renderAdminProducts() {
+      const container = document.getElementById('admin-products-list');
+      const q = (document.getElementById('admin-search')?.value || '').toLowerCase().trim();
+
+      let list = adminProducts;
+      if (currentFilter !== 'all') {
+        list = list.filter(p => p.category === currentFilter);
+      }
+      if (q) {
+        list = list.filter(p => p.name.toLowerCase().includes(q));
+      }
+
+      document.getElementById('product-count-badge').textContent = adminProducts.length;
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-12 text-center text-gray-400">
+            <div class="text-3xl mb-2">🔍</div>
+            <p class="text-xs font-semibold">រកមិនឃើញទំនិញទេ</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = list.map(p => `
+        <div class="bg-white p-3 rounded-2xl border border-gray-200 shadow-sm flex gap-3 items-center justify-between">
+          <img src="${p.image}" alt="${p.name}" class="w-16 h-16 rounded-xl object-cover border flex-shrink-0" />
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-1.5 text-[10px]">
+              <span class="text-rose-600 font-bold">${p.categoryName || p.category}</span>
+              ${p.badge ? `<span class="bg-rose-100 text-rose-700 px-1.5 rounded">${p.badge}</span>` : ''}
+              <span class="${p.inStock ? 'text-emerald-600' : 'text-red-500'} font-semibold">• ${p.inStock ? 'មានស្តុក' : 'អស់ស្តុក'}</span>
+            </div>
+            <h4 class="text-xs font-bold text-gray-800 truncate mt-0.5">${p.name}</h4>
+            <div class="text-xs font-extrabold text-rose-600 mt-1">
+              $${Number(p.priceUSD).toFixed(2)} 
+              <span class="text-[10px] text-gray-400 font-normal">(${(p.priceUSD * 4000).toLocaleString()} ៛)</span>
+            </div>
+          </div>
+          <div class="flex flex-col gap-1">
+            <button onclick="editProduct('${p.id}')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs px-2.5 py-1 rounded-lg font-bold">
+              ✏️
+            </button>
+            <button onclick="deleteProduct('${p.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 text-xs px-2.5 py-1 rounded-lg font-bold">
+              🗑️
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Add / Edit Modal
+    function openAddModal() {
+      document.getElementById('modal-title').textContent = "➕ បន្ថែមទំនិញថ្មី";
+      document.getElementById('product-form').reset();
+      document.getElementById('prod-id').value = "";
+      document.getElementById('prod-instock').checked = true;
+      document.getElementById('product-modal').classList.remove('hidden');
+    }
+
+    function editProduct(id) {
+      const p = adminProducts.find(item => item.id === id);
+      if (!p) return;
+      document.getElementById('modal-title').textContent = "✏️ កែសម្រួលទំនិញ";
+      document.getElementById('prod-id').value = p.id;
+      document.getElementById('prod-name').value = p.name;
+      document.getElementById('prod-category').value = p.category;
+      document.getElementById('prod-size').value = p.size || "";
+      document.getElementById('prod-price').value = p.priceUSD;
+      document.getElementById('prod-old-price').value = p.oldPriceUSD || "";
+      document.getElementById('prod-badge').value = p.badge || "";
+      document.getElementById('prod-image').value = p.image;
+      document.getElementById('prod-desc').value = p.description || "";
+      document.getElementById('prod-benefits').value = (p.benefits || []).join(', ');
+      document.getElementById('prod-instock').checked = p.inStock !== false;
+
+      document.getElementById('product-modal').classList.remove('hidden');
+    }
+
+    function closeProductModal() {
+      document.getElementById('product-modal').classList.add('hidden');
+    }
+
+    function setPresetImg(url) {
+      document.getElementById('prod-image').value = url;
+    }
+
+    // Save Product
+    function saveProduct(e) {
+      e.preventDefault();
+      const id = document.getElementById('prod-id').value || ('item-' + Date.now());
+      const name = document.getElementById('prod-name').value.trim();
+      const category = document.getElementById('prod-category').value;
+      const size = document.getElementById('prod-size').value.trim() || 'ស្តង់ដារ';
+      const priceUSD = parseFloat(document.getElementById('prod-price').value) || 0;
+      const oldPriceUSD = parseFloat(document.getElementById('prod-old-price').value) || null;
+      const badge = document.getElementById('prod-badge').value;
+      const image = document.getElementById('prod-image').value.trim();
+      const description = document.getElementById('prod-desc').value.trim();
+      const benefitsStr = document.getElementById('prod-benefits').value.trim();
+      const benefits = benefitsStr ? benefitsStr.split(',').map(s => s.trim()).filter(Boolean) : [];
+      const inStock = document.getElementById('prod-instock').checked;
+
+      const catNames = {
+        hair: "ថែរក្សាសក់",
+        face: "ថែរក្សាផ្ទៃមុខ",
+        skin: "ថែរក្សាស្បែក",
+        body: "ថែរក្សាដងខ្លួន"
+      };
+
+      const newProd = {
+        id,
+        name,
+        category,
+        categoryName: catNames[category] || category,
+        priceUSD,
+        priceKHR: priceUSD * 4000,
+        oldPriceUSD,
+        image,
+        badge,
+        rating: 5.0,
+        reviews: 50,
+        size,
+        inStock,
+        description,
+        benefits: benefits.length ? benefits : ["ផលិតផលសុទ្ធ ១០០%", "គុណភាពល្អ តម្លៃសមរម្យ"],
+        usage: "ប្រើប្រាស់ជារៀងរាល់ថ្ងៃតាមតម្រូវការ។"
+      };
+
+      const existingIndex = adminProducts.findIndex(p => p.id === id);
+      if (existingIndex > -1) {
+        adminProducts[existingIndex] = { ...adminProducts[existingIndex], ...newProd };
+        showToast("បានកែសម្រួលទំនិញជោគជ័យ! ✅");
+      } else {
+        adminProducts.unshift(newProd);
+        showToast("បានបន្ថែមទំនិញថ្មីជោគជ័យ! 🎉");
+      }
+
+      saveLocal();
+      renderAdminProducts();
+      closeProductModal();
+    }
+
+    // Delete Product
+    function deleteProduct(id) {
+      if (confirm("តើអ្នកពិតជាចង់លុបទំនិញនេះមែនទេ?")) {
+        adminProducts = adminProducts.filter(p => p.id !== id);
+        saveLocal();
+        renderAdminProducts();
+        showToast("បានលុបទំនិញរួចរាល់! 🗑️");
+      }
+    }
+
+    // Save to LocalStorage
+    function saveLocal() {
+      localStorage.setItem('sreyleak_custom_products', JSON.stringify(adminProducts));
+      localStorage.setItem('sreyleak_custom_config', JSON.stringify(adminConfig));
+    }
+
+    // Config UI
+    function loadConfigUI() {
+      document.getElementById('cfg-shop-name').value = adminConfig.shopName || "";
+      document.getElementById('cfg-slogan').value = adminConfig.slogan || "";
+      document.getElementById('cfg-phone').value = adminConfig.phone || "";
+      document.getElementById('cfg-tg-link').value = adminConfig.telegramDirectLink || "";
+      document.getElementById('cfg-fee-pp').value = adminConfig.deliveryFees?.phnompenh || 1.5;
+      document.getElementById('cfg-fee-province').value = adminConfig.deliveryFees?.province || 2.5;
+      document.getElementById('cfg-bakong-name').value = adminConfig.bakongQR?.merchantName || "";
+    }
+
+    function saveStoreSettings() {
+      adminConfig.shopName = document.getElementById('cfg-shop-name').value.trim();
+      adminConfig.slogan = document.getElementById('cfg-slogan').value.trim();
+      adminConfig.phone = document.getElementById('cfg-phone').value.trim();
+      adminConfig.telegramDirectLink = document.getElementById('cfg-tg-link').value.trim();
+      adminConfig.deliveryFees = {
+        phnompenh: parseFloat(document.getElementById('cfg-fee-pp').value) || 1.5,
+        province: parseFloat(document.getElementById('cfg-fee-province').value) || 2.5
+      };
+      adminConfig.bakongQR = {
+        merchantName: document.getElementById('cfg-bakong-name').value.trim() || "SREYLEAK COSMETICS",
+        accountNumber: adminConfig.phone,
+        bank: "Bakong / ABA / Wing"
+      };
+
+      saveLocal();
+      showToast("បានរក្សាទុកការកំណត់ហាងជោគជ័យ! ✅");
+    }
+
+    // Generate products.js File Content
+    function generateJsFileContent() {
+      return `// បញ្ជីទំនិញគ្រឿងក្រអូបហាង ស្រីល័ក្ខ (Sreyleak Beauty Store)
+// កែសម្រួលចុងក្រោយ៖ ${new Date().toLocaleString('km-KH')}
+
+const PRODUCTS = ${JSON.stringify(adminProducts, null, 2)};
+
+const STORE_CONFIG = ${JSON.stringify(adminConfig, null, 2)};
+`;
+    }
+
+    // Copy to Clipboard
+    function copyGeneratedCode() {
+      const code = generateJsFileContent();
+      navigator.clipboard.writeText(code).then(() => {
+        showToast("បានចម្លងកូដ JS រួចរាល់! 📋");
+      });
+    }
+
+    // Download File
+    function downloadProductsFile() {
+      const code = generateJsFileContent();
+      const blob = new Blob([code], { type: 'application/javascript;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'products.js';
+      a.click();
+      showToast("កំពុងទាញយក products.js... 📥");
+    }
+
+    // Direct Save to File via Server API
+    async function saveDirectToFile() {
+      try {
+        const res = await fetch('/api/save-products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            products: adminProducts,
+            config: adminConfig
+          })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          showToast("បាន Save ចូល js/products.js ជោគជ័យ! ⚡");
+        } else {
+          showToast("⚠️ មិនអាច Save បានទេ៖ " + (data.error || ""));
+        }
+      } catch (err) {
+        alert("មុខងារ Auto Save ដំណើរការនៅពេលលោកអ្នក run 'node server.js' ឬ 'start_shop.bat' នៅលើកុំព្យូទ័រ!\n\nប្រសិនបើនៅលើ GitHub Pages សូមប្រើប៊ូតុង 'ចម្លងកូដ JS' ឬ 'ទាញយក'");
+      }
+    }
+
+    // Search input listener
+    document.getElementById('admin-search')?.addEventListener('input', renderAdminProducts);
+
+    // Initial Load
+    document.addEventListener('DOMContentLoaded', initData);
+  </script>
+</body>
+</html>

@@ -9,3 +9,4 @@ echo.
 echo កំពុងដំណើរការ Telegram Bot... (សូមកុំបិទផ្ទាំងនេះ)
 node bot/bot.js
 pause
+
