@@ -14,7 +14,7 @@ const path = require('path');
 // អាន configuration ពី env ឬ default
 const BOT_TOKEN = process.env.BOT_TOKEN || "9100764037:AAHZBS0LYrpjfqnOiYg-nIU9azgTcOvgqJE";
 const WEB_APP_URL = process.env.WEB_APP_URL || "https://chhat.github.io/sreyleak-shop/";
-const ADMIN_CHAT_ID = process.env.ADMIN_CHAT_ID || "";
+const ADMIN_CHAT_ID = process.env.ADMIN_CHAT_ID || "751196809"; // Telegram Chat ID របស់ម្ចាស់ហាង (ឆុំ ឆាត - ស្រីល័ក្ខ)
 
 const API_BASE = `https://api.telegram.org/bot${BOT_TOKEN}`;
 
